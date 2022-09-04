@@ -16,20 +16,38 @@ tasks:
       - ansible-galaxy install -r requirements.yml --force
       - ansible-galaxy collection install -r requirements.yml --force
 
-  list:
+  adhoc:list:
     desc: list all the hosts
     dir: provision/ansible
     cmds:
       - ansible all -i {{.ANSIBLE_INVENTORY_DIR}}/hosts.yml --list-hosts
 
-  ping:
+  adhoc:ping:
     desc: ping all the hosts
     dir: provision/ansible
     cmds:
       - ansible all -i {{.ANSIBLE_INVENTORY_DIR}}/hosts.yml --one-line -m 'ping'
 
-  uptime:
+  adhoc:uptime:
     desc: uptime of all the hosts
     dir: provision/ansible
     cmds:
       - ansible all -i {{.ANSIBLE_INVENTORY_DIR}}/hosts.yml --one-line -a 'uptime'
+
+  playbook:system-upgrade:
+    desc: Upgrade all servers and vms
+    dir: provision/ansible
+    cmds:
+      - "ansible-playbook -i {{.ANSIBLE_INVENTORY_DIR}}/hosts.yml {{.ANSIBLE_PLAYBOOK_DIR}}/system-upgrade.yml"
+
+  playbook:system-init:
+    desc: Initialize all servers and vms
+    dir: provision/ansible
+    cmds:
+      - "ansible-playbook -i {{.ANSIBLE_INVENTORY_DIR}}/hosts.yml {{.ANSIBLE_PLAYBOOK_DIR}}/system-init.yml"
+
+  playbook:container-install:
+    desc: Install container on docker hosts.
+    dir: provision/ansible
+    cmds:
+      - "ansible-playbook -i {{.ANSIBLE_INVENTORY_DIR}}/hosts.yml {{.ANSIBLE_PLAYBOOK_DIR}}/container-install.yml"

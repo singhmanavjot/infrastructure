@@ -1,0 +1,28 @@
+---
+- name: Generate or update homer config.
+  become: true
+  ansible.builtin.template:
+    src: homer-config.yml.j2
+    dest: "{{ appdata_path }}/{{ item.name }}/config.yml"
+    owner: "{{ path_file_owner }}"
+    group: "{{ path_file_group }}"
+    mode: "{{ file_mode }}"
+  notify: Restart homer
+
+- name: Create or update homer icons directory.
+  become: true
+  ansible.builtin.file:
+    path: "{{ appdata_path }}/{{ item.name }}/tools"
+    state: directory
+    owner: "{{ path_file_owner }}"
+    group: "{{ path_file_group }}"
+    mode: "{{ path_mode }}"
+
+- name: Install or update homer-icons from git.
+  ansible.builtin.git:
+    repo: https://github.com/NX211/homer-icons.git
+    dest: "{{ appdata_path }}/{{ item.name }}/tools/homer-icons"
+    update: true
+    accept_hostkey: true
+    version: master
+  notify: Restart homer

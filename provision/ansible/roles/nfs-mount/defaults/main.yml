@@ -1,0 +1,7 @@
+---
+mount_path: ""
+mount_src: ""
+mount_opts: defaults
+owner: root
+group: root
+mode: 0755

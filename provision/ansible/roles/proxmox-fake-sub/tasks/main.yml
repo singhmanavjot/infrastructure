@@ -1,0 +1,16 @@
+---
+- name: Load installed packages.
+  ansible.builtin.package_facts:
+    manager: "auto"
+
+- name: Ensure pve-fake-subscription is installed.
+  block:
+    - name: Install pve-fake-subscription.
+      ansible.builtin.apt:
+        deb: https://github.com/Jamesits/pve-fake-subscription/releases/download/v0.0.7/pve-fake-subscription_0.0.7_all.deb
+
+    - name: Prevent fake keys from checking against proxmox servers.
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        line: 127.0.0.1 shop.maurer-it.com
+  when: "'pve-fake-subscription' not in ansible_facts.packages"

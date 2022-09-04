@@ -1,0 +1,25 @@
+---
+- name: Define roles for all hosts.
+  hosts: all
+
+  roles:
+    - role: geerlingguy.ntp
+
+- name: Define roles for proxmox hosts.
+  hosts: proxmox
+
+  roles:
+    - role: proxmox-free-repo
+    - role: proxmox-fake-sub
+
+- name: Define roles for docker hosts.
+  hosts: docker
+
+  roles:
+    - role: devsec.hardening.os_hardening
+    - role: devsec.hardening.ssh_hardening
+    - role: geerlingguy.docker
+    - role: nfs-mount
+      vars:
+        mount_path: /mnt/data
+        mount_src: "{{ nfs_share }}"

@@ -1,0 +1,53 @@
+---
+- name: Define roles for all hosts.
+  hosts: all
+
+  tasks:
+    - name: Ensure all packages are up to date. (Debian)
+      ansible.builtin.apt:
+        upgrade: full
+        update_cache: true
+        cache_valid_time: 3600
+        autoclean: true
+        autoremove: true
+      when: ansible_os_family == 'Debian'
+
+    - name: Ensure all packages are up to date. (RedHat)
+      become: true
+      ansible.builtin.dnf:
+        name: '*'
+        state: latest  # noqa package-latest
+        update_cache: true
+      when: ansible_os_family == 'RedHat'
+
+    - name: Ensure unneeded packages are removed. (RedHat)
+      become: true
+      ansible.builtin.dnf:
+        autoremove: true
+      when: ansible_os_family == 'RedHat'
+
+    - name: Check if a reboot is required.
+      ansible.builtin.stat:
+        path: /var/run/reboot-required
+      register: reboot_required
+
+    - name: Tell user that a reboot is required.
+      ansible.builtin.debug:
+        msg: Server {{ ansible_hostname }} requires a restart.
+      when: reboot_required.stat.exists
+
+- name: Define roles for docker hosts.
+  hosts: docker
+
+  tasks:
+    - name: Update docker compose container.
+      ansible.builtin.shell:  # noqa command-instead-of-shell
+        chdir: "{{ docker_compose_path }}"
+        cmd: "{{ docker_update_command }}"
+      changed_when: false
+
+    - name: Cleanup docker images and volumes.
+      ansible.builtin.shell:  # noqa command-instead-of-shell
+        chdir: "{{ docker_compose_path }}"
+        cmd: "{{ docker_cleanup_command }}"
+      changed_when: false

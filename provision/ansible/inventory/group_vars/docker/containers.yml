@@ -1,0 +1,114 @@
+---
+docker_compose_path: /srv
+appdata_path: "{{ docker_compose_path }}/appdata"
+docker_update_command: docker-compose pull && docker-compose down --remove-orphans && docker-compose rm && docker-compose up -d
+docker_cleanup_command: docker image prune -f && docker volume prune -f
+containers:
+  - name: homer
+    enabled: true
+    image: b4bz/homer:v22.08.1
+    volumes:
+      - "{{ appdata_path }}/homer:/www/assets"
+    ports:
+      - 8888:8080
+    mem_limit: 8m
+    restart: unless-stopped
+
+  - name: qbittorrent-vpn
+    enabled: true
+    image: lscr.io/linuxserver/wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    volumes:
+      - "{{ appdata_path }}/qbittorrent-vpn:/config"
+      - /lib/modules:/lib/modules
+    ports:
+      - 8080:8080
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    mem_limit: 8m
+    restart: unless-stopped
+    homer_category: download clients
+    homer_icon: qbittorrent
+
+  - name: qbittorrent
+    enabled: true
+    image: lscr.io/linuxserver/qbittorrent
+    environment:
+      - WEBUI_PORT=8080
+    volumes:
+      - "{{ appdata_path }}/qbittorrent:/config"
+      - /mnt/data/torrents:/data/torrents
+    network_mode: "service:qbittorrent-vpn"
+    depends_on:
+      - qbittorrent-vpn
+    mem_limit: 64m
+    restart: unless-stopped
+
+  - name: radarr
+    enabled: true
+    image: lscr.io/linuxserver/radarr
+    volumes:
+      - "{{ appdata_path }}/radarr:/config"
+      - /mnt/data:/data
+    ports:
+      - 7878:7878
+    mem_limit: 512m
+    restart: unless-stopped
+    homer_category: request management
+    homer_icon: radarr
+
+  - name: sonarr
+    enabled: true
+    image: lscr.io/linuxserver/sonarr
+    volumes:
+      - "{{ appdata_path }}/sonarr:/config"
+      - /mnt/data:/data
+    ports:
+      - 8989:8989
+    mem_limit: 512m
+    restart: unless-stopped
+    homer_category: request management
+    homer_icon: sonarr
+
+  - name: sonarr-anime
+    enabled: true
+    image: lscr.io/linuxserver/sonarr
+    volumes:
+      - "{{ appdata_path }}/sonarr-anime:/config"
+      - /mnt/data:/data
+    ports:
+      - 9898:8989
+    mem_limit: 512m
+    restart: unless-stopped
+    homer_category: request management
+    homer_icon: sonarr
+
+  - name: prowlarr
+    enabled: true
+    image: lscr.io/linuxserver/prowlarr:develop
+    volumes:
+      - "{{ appdata_path }}/prowlarr:/config"
+    ports:
+      - 9696:9696
+    mem_limit: 512m
+    restart: unless-stopped
+    homer_category: request management
+    homer_icon: prowlarr
+
+  - name: jellyfin
+    enabled: true
+    image: lscr.io/linuxserver/jellyfin
+    volumes:
+      - "{{ appdata_path }}/jellyfin:/config"
+      - /mnt/data/media:/data/media
+    ports:
+      - 8096:8096
+      - 7359:7359/udp
+    devices:
+      - /dev/dri:/dev/dri
+    mem_limit: 4096m
+    restart: unless-stopped
+    homer_category: media
+    homer_icon: jellyfin
