@@ -3,7 +3,8 @@ global_env_vars:
   - "PUID=1000"
   - "PGID=1000"
   - "TZ=Europe/Vienna"
-containers: []
+containers:
+  []
   # - name: nginx
   #   enabled: false
   #   mem_limit: 256m

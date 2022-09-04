@@ -1,6 +1,6 @@
 ---
 - name: Restart docker compose
-  ansible.builtin.shell:  # noqa command-instead-of-shell
+  ansible.builtin.shell: # noqa command-instead-of-shell
     chdir: "{{ docker_compose_path }}"
     cmd: "{{ docker_update_command }}"
 

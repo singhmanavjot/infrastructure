@@ -15,8 +15,8 @@
     - name: Ensure all packages are up to date. (RedHat)
       become: true
       ansible.builtin.dnf:
-        name: '*'
-        state: latest  # noqa package-latest
+        name: "*"
+        state: latest # noqa package-latest
         update_cache: true
       when: ansible_os_family == 'RedHat'
 
@@ -41,13 +41,13 @@
 
   tasks:
     - name: Update docker compose container.
-      ansible.builtin.shell:  # noqa command-instead-of-shell
+      ansible.builtin.shell: # noqa command-instead-of-shell
         chdir: "{{ docker_compose_path }}"
         cmd: "{{ docker_update_command }}"
       changed_when: false
 
     - name: Cleanup docker images and volumes.
-      ansible.builtin.shell:  # noqa command-instead-of-shell
+      ansible.builtin.shell: # noqa command-instead-of-shell
         chdir: "{{ docker_compose_path }}"
         cmd: "{{ docker_cleanup_command }}"
       changed_when: false

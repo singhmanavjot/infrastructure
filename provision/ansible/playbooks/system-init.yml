@@ -3,7 +3,7 @@
   hosts: all
 
   roles:
-    - role: geerlingguy.ntp
+    - role: geerlingguy.ntp # noqa internal-error
 
 - name: Define roles for proxmox hosts.
   hosts: proxmox
