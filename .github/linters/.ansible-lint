@@ -1,0 +1,5 @@
+# .ansible-lint
+exclude_paths:
+  - ../../provision/ansible/galaxy_collections
+  - ../../provision/ansible/galaxy_roles
+  - ../../provision/ansible/*.sops.*
