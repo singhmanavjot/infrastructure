@@ -1,0 +1,6 @@
+---
+- name: Define roles for docker hosts.
+  hosts: docker
+
+  roles:
+    - role: docker-compose-generator

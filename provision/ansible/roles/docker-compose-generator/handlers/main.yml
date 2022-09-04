@@ -1,0 +1,15 @@
+---
+- name: Restart docker compose
+  ansible.builtin.shell: # noqa command-instead-of-shell
+    chdir: "{{ docker_compose_path }}"
+    cmd: "{{ docker_update_command }}"
+
+- name: Restart homer
+  ansible.builtin.command:
+    chdir: "{{ docker_compose_path }}"
+    cmd: docker-compose restart homer
+
+- name: Restart qbittorrent-vpn
+  ansible.builtin.command:
+    chdir: "{{ docker_compose_path }}"
+    cmd: docker-compose restart qbittorrent-vpn

@@ -1,0 +1,2 @@
+*.yml linguist-detectable=true
+*.sops.* diff=sopsdiffer

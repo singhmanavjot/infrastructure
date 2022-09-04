@@ -1,0 +1,7 @@
+---
+creation_rules:
+  - path_regex: provision/.*\.sops\.ya?ml
+    unencrypted_regex: "^(kind)$"
+    key_groups:
+      - age:
+          - age1kh8m8zxpvxmj90s4x6hjhd7u5t35gy94knsq5u53gukavpd42qvsg02yfl
