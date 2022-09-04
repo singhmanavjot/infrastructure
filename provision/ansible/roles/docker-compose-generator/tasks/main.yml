@@ -8,18 +8,7 @@
     group: "{{ path_file_group }}"
     mode: "{{ path_mode }}"
   with_items: "{{ containers }}"
-  when: item.enabled and item.name not in ("qbittorrent-vpn", "qbittorrent")
-
-- name: Create or update directory for {{ item.name }}.
-  become: true
-  ansible.builtin.file:
-    path: "{{ appdata_path }}/{{ item.name }}"
-    state: directory
-    owner: 911
-    group: 911
-    mode: 0755
-  with_items: "{{ containers }}"
-  when: item.enabled and item.name in ("qbittorrent-vpn", "qbittorrent")
+  when: item.enabled
 
 - name: Include homer tasks.
   ansible.builtin.include_tasks: homer.yml
@@ -32,6 +21,7 @@
   when: item.name == "qbittorrent-vpn" and item.enabled
 
 - name: Generate or update docker-compose file.
+  become: true
   ansible.builtin.template:
     src: docker-compose.yml.j2
     dest: "{{ docker_compose_path }}/docker-compose.yml"
