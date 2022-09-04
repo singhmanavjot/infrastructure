@@ -3,7 +3,7 @@
   ansible.builtin.copy:
     content: "{{ wireguard_conf }}"
     dest: "{{ appdata_path }}/{{ item.name }}/wg0.conf"
-    owner: 911
-    group: 911
-    mode: 0664
+    owner: "{{ path_file_owner }}"
+    group: "{{ path_file_group }}"
+    mode: "{{ file_mode }}"
   notify: Restart qbittorrent-vpn
