@@ -71,7 +71,7 @@ services:
     icon: "fas fa-play"
     items:
 {% for container in containers %}
-{% if container.ports is defined and container.homer_category is defined and container.homer_category == "media" %}
+{% if container.enabled and container.ports is defined and container.homer_category is defined and container.homer_category == "media" %}
       - name: {{ container.name }}
         logo: "assets/tools/homer-icons/png/{{ container.homer_icon }}.png"
         url: "http://{{ ansible_host }}:{{ container.ports.0.split(":").0 }}"
@@ -90,7 +90,7 @@ services:
     icon: "fas fa-server"
     items:
 {% for container in containers %}
-{% if container.ports is defined and container.homer_category is defined and container.homer_category == "server" %}
+{% if container.enabled and container.ports is defined and container.homer_category is defined and container.homer_category == "server" %}
       - name: {{ container.name }}
         logo: "assets/tools/homer-icons/png/{{ container.homer_icon }}.png"
         url: "http://{{ ansible_host }}:{{ container.ports.0.split(":").0 }}"
@@ -109,7 +109,7 @@ services:
     icon: "fas fa-cloud-download-alt"
     items:
 {% for container in containers %}
-{% if container.ports is defined and container.homer_category is defined and container.homer_category == "download clients" %}
+{% if container.enabled and container.ports is defined and container.homer_category is defined and container.homer_category == "download clients" %}
       - name: {{ container.name }}
         logo: "assets/tools/homer-icons/png/{{ container.homer_icon }}.png"
         url: "http://{{ ansible_host }}:{{ container.ports.0.split(":").0 }}"
@@ -125,7 +125,7 @@ services:
     icon: "fas fa-file-download"
     items:
 {% for container in containers %}
-{% if container.ports is defined and container.homer_category is defined and container.homer_category == "private tracker" %}
+{% if container.enabled and container.ports is defined and container.homer_category is defined and container.homer_category == "private tracker" %}
       - name: {{ container.name }}
         logo: "assets/tools/homer-icons/png/{{ container.homer_icon }}.png"
         url: "http://{{ ansible_host }}:{{ container.ports.0.split(":").0 }}"
@@ -141,7 +141,7 @@ services:
     icon: "fas fa-download"
     items:
 {% for container in containers %}
-{% if container.ports is defined and container.homer_category is defined and container.homer_category == "request management" %}
+{% if container.enabled and container.ports is defined and container.homer_category is defined and container.homer_category == "request management" %}
       - name: {{ container.name }}
         logo: "assets/tools/homer-icons/png/{{ container.homer_icon }}.png"
         url: "http://{{ ansible_host }}:{{ container.ports.0.split(":").0 }}"

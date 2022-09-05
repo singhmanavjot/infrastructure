@@ -15,7 +15,7 @@ containers:
     restart: unless-stopped
 
   - name: qbittorrent-vpn
-    enabled: true
+    enabled: false
     image: lscr.io/linuxserver/wireguard
     cap_add:
       - NET_ADMIN
@@ -33,7 +33,7 @@ containers:
     homer_icon: qbittorrent
 
   - name: qbittorrent
-    enabled: true
+    enabled: false
     image: lscr.io/linuxserver/qbittorrent
     environment:
       - WEBUI_PORT=8080
