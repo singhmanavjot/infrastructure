@@ -115,6 +115,9 @@ services:
         url: "http://{{ ansible_host }}:{{ container.ports.0.split(":").0 }}"
 {% endif %}
 {% endfor %}
+      - name: "qbittorrent"
+        logo: "assets/tools/homer-icons/png/qbittorrent.png"
+        url: "https://flow.seedhost.eu/manav/qbittorrent/"
       - name: "ruTorrent"
         logo: "assets/tools/homer-icons/png/rutorrent.png"
         url: "https://flow.seedhost.eu/manav/rutorrent/"
