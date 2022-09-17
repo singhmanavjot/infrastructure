@@ -3,6 +3,12 @@ docker_compose_path: /srv
 appdata_path: "{{ docker_compose_path }}/appdata"
 docker_update_command: docker-compose pull && docker-compose down --remove-orphans && docker-compose rm && docker-compose up -d
 docker_cleanup_command: docker image prune -f && docker volume prune -f
+
+global_env_vars:
+  - PUID={{ path_file_owner }}
+  - PGID={{ path_file_group }}
+  - TZ=Europe/Vienna
+
 containers:
   - name: homer
     enabled: true
@@ -23,6 +29,7 @@ containers:
     volumes:
       - "{{ appdata_path }}/qbittorrent-vpn:/config"
       - /lib/modules:/lib/modules
+    include_global_env_vars: true
     ports:
       - 8080:8080
     sysctls:
@@ -40,6 +47,7 @@ containers:
     volumes:
       - "{{ appdata_path }}/qbittorrent:/config"
       - /mnt/data/torrents:/data/torrents
+    include_global_env_vars: true
     network_mode: "service:qbittorrent-vpn"
     depends_on:
       - qbittorrent-vpn
@@ -52,6 +60,7 @@ containers:
     volumes:
       - "{{ appdata_path }}/radarr:/config"
       - /mnt/data:/data
+    include_global_env_vars: true
     ports:
       - 7878:7878
     mem_limit: 512m
@@ -65,6 +74,7 @@ containers:
     volumes:
       - "{{ appdata_path }}/sonarr:/config"
       - /mnt/data:/data
+    include_global_env_vars: true
     ports:
       - 8989:8989
     mem_limit: 512m
@@ -78,6 +88,7 @@ containers:
     volumes:
       - "{{ appdata_path }}/sonarr-anime:/config"
       - /mnt/data:/data
+    include_global_env_vars: true
     ports:
       - 9898:8989
     mem_limit: 512m
@@ -90,6 +101,7 @@ containers:
     image: lscr.io/linuxserver/prowlarr:develop
     volumes:
       - "{{ appdata_path }}/prowlarr:/config"
+    include_global_env_vars: true
     ports:
       - 9696:9696
     mem_limit: 512m
@@ -103,6 +115,7 @@ containers:
     volumes:
       - "{{ appdata_path }}/jellyfin:/config"
       - /mnt/data/media:/data/media
+    include_global_env_vars: true
     ports:
       - 8096:8096
       - 7359:7359/udp
@@ -112,3 +125,119 @@ containers:
     restart: unless-stopped
     homer_category: media
     homer_icon: jellyfin
+
+  - name: jellyseerr
+    enabled: true
+    image: fallenbagel/jellyseerr:1.1.1
+    volumes:
+      - "{{ appdata_path }}/jellyseerr:/app/config"
+    include_global_env_vars: true
+    ports:
+      - 5055:5055
+    mem_limit: 512m
+    restart: unless-stopped
+    homer_category: request management
+    homer_icon: overseerr
+
+  - name: prometheus
+    enabled: true
+    image: prom/prometheus:v2.38.0
+    volumes:
+      - "{{ appdata_path }}/prometheus/config:/etc/prometheus"
+      - "{{ appdata_path }}/prometheus/data:/prometheus"
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/etc/prometheus/console_libraries"
+      - "--web.console.templates=/etc/prometheus/consoles"
+      - "--storage.tsdb.retention.time=200h"
+      - "--web.enable-lifecycle"
+    include_global_env_vars: true
+    user: "{{ path_file_owner }}"
+    ports:
+      - 9091:9090
+    mem_limit: 2048m
+    restart: unless-stopped
+    homer_category: monitoring
+    homer_icon: prometheus
+
+  - name: nodeexporter
+    enabled: true
+    image: prom/node-exporter:v1.3.1
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.rootfs=/rootfs"
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
+    ports:
+      - 9100:9100
+    include_global_env_vars: true
+    prometheus_scrape: true
+    mem_limit: 256m
+    restart: unless-stopped
+
+  - name: cadvisor
+    enabled: true
+    image: gcr.io/cadvisor/cadvisor:v0.45.0
+    privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /cgroup:/cgroup:ro
+    ports:
+      - 8081:8080
+    include_global_env_vars: true
+    prometheus_scrape: true
+    mem_limit: 512m
+    restart: unless-stopped
+
+  - name: grafana
+    enabled: true
+    image: grafana/grafana:9.1.1
+    volumes:
+      - "{{ appdata_path }}/grafana:/var/lib/grafana"
+    include_global_env_vars: true
+    user: "{{ path_file_owner }}"
+    environment:
+      - GF_SECURITY_ADMIN_USER={{ grafana_user }}
+      - GF_SECURITY_ADMIN_PASSWORD={{ grafana_passwd }}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    ports:
+      - 3000:3000
+    mem_limit: 512m
+    restart: unless-stopped
+    homer_category: monitoring
+    homer_icon: grafana
+
+  - name: alertmanager
+    enabled: true
+    image: prom/alertmanager:v0.24.0
+    volumes:
+      - "{{ appdata_path }}/alertmanager:/etc/alertmanager"
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+    include_global_env_vars: true
+    ports:
+      - 9093:9093
+    mem_limit: 512m
+    restart: unless-stopped
+    homer_category: monitoring
+    homer_icon: alertmanager
+
+  - name: alertmanager-discord
+    enabled: true
+    image: benjojo/alertmanager-discord:latest
+    include_global_env_vars: true
+    environment:
+      - DISCORD_WEBHOOK={{ alertmanager_discord_webhook }}
+    mem_limit: 128m
+    restart: unless-stopped

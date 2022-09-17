@@ -13,3 +13,13 @@
   ansible.builtin.command:
     chdir: "{{ docker_compose_path }}"
     cmd: docker-compose restart qbittorrent-vpn
+
+- name: Restart prometheus
+  ansible.builtin.command:
+    chdir: "{{ docker_compose_path }}"
+    cmd: docker-compose restart prometheus
+
+- name: Restart alertmanager
+  ansible.builtin.command:
+    chdir: "{{ docker_compose_path }}"
+    cmd: docker-compose restart alertmanager

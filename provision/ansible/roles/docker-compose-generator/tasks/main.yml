@@ -8,7 +8,7 @@
     group: "{{ path_file_group }}"
     mode: "{{ path_mode }}"
   with_items: "{{ containers }}"
-  when: item.enabled
+  when: item.enabled and item.volumes is defined
 
 - name: Include homer tasks.
   ansible.builtin.include_tasks: homer.yml
@@ -19,6 +19,16 @@
   ansible.builtin.include_tasks: qbittorrent-vpn.yml
   with_items: "{{ containers }}"
   when: item.name == "qbittorrent-vpn" and item.enabled
+
+- name: Include prometheus tasks.
+  ansible.builtin.include_tasks: prometheus_config.yml
+  with_items: "{{ containers }}"
+  when: item.name == "prometheus" and item.enabled
+
+- name: Include alertmanager tasks.
+  ansible.builtin.include_tasks: alertmanager.yml
+  with_items: "{{ containers }}"
+  when: item.name == "alertmanager" and item.enabled
 
 - name: Generate or update docker-compose file.
   become: true

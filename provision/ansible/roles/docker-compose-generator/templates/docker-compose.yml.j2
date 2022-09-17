@@ -13,6 +13,9 @@ services:
 {% if container.privileged is defined %}
     privileged: {{ container.privileged }}
 {% endif %}
+{% if container.user is defined %}
+    user: "{{ container.user }}"
+{% endif %}
 {% if container.cap_add is defined %}
     cap_add:
 {% for cap in container.cap_add %}
@@ -66,7 +69,10 @@ services:
     mem_limit: {{ container.mem_limit }}
 {% endif %}
 {% if container.command is defined %}
-    command: {{ container.command }}
+    command:
+{% for command in container.command %}
+      - {{ command }}
+{% endfor %}
 {% endif %}
 {% if container.security_opt is defined %}
     security_opt:

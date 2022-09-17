@@ -84,8 +84,24 @@ services:
         logo: "assets/tools/homer-icons/png/youtube.png"
         url: "https://www.youtube.com/feed/subscriptions"
       - name: "Twitch"
-        logo: "assets/tools/homer-icons/png/peertube.png"
+        logo: "assets/tools/homer-icons/png/tvheadend.png"
         url: "https://www.twitch.tv/directory/following"
+  - name: Sports
+    icon: "fas fa-volleyball"
+    items:
+{% for container in containers %}
+{% if container.enabled and container.ports is defined and container.homer_category is defined and container.homer_category == "sports" %}
+      - name: {{ container.name }}
+        logo: "assets/tools/homer-icons/png/{{ container.homer_icon }}.png"
+        url: "http://{{ ansible_host }}:{{ container.ports.0.split(":").0 }}"
+{% endif %}
+{% endfor %}
+      - name: "Volleyball World TV"
+        logo: "assets/tools/homer-icons/png/grav.png"
+        url: "https://volleyballworld.tv/schedule"
+      - name: "Volleyball World"
+        logo: "assets/tools/homer-icons/png/grav.png"
+        url: "https://en.volleyballworld.com/"
   - name: Server
     icon: "fas fa-server"
     items:
@@ -105,6 +121,16 @@ services:
       - name: "pfSense"
         logo: "assets/tools/homer-icons/png/pfsense.png"
         url: "https://192.168.13.1:10443/"
+  - name: Monitoring
+    icon: "fas fa-chart-pie"
+    items:
+{% for container in containers %}
+{% if container.enabled and container.ports is defined and container.homer_category is defined and container.homer_category == "monitoring" %}
+      - name: {{ container.name }}
+        logo: "assets/tools/homer-icons/png/{{ container.homer_icon }}.png"
+        url: "http://{{ ansible_host }}:{{ container.ports.0.split(":").0 }}"
+{% endif %}
+{% endfor %}
   - name: Download Clients
     icon: "fas fa-cloud-download-alt"
     items:
@@ -160,15 +186,6 @@ services:
         url: "https://myanimelist.net/animelist/iFluffy?status=1"
       - name: "MyDramaList"
         url: "https://mydramalist.com/dramalist/manav"
-  - name: Services
-    icon: "fas fa-cubes"
-    items:
       - name: "GitHub"
         logo: "assets/tools/homer-icons/png/github.png"
         url: "https://github.com/singhmanavjot"
-      - name: "Google Drive"
-        url: "https://drive.google.com/drive/my-drive"
-      - name: "Monkeytype"
-        url: "https://monkeytype.com/"
-      - name: "Raiffeisen"
-        url: "https://sso.raiffeisen.at/mein-login/identify"
