@@ -1,0 +1,10 @@
+---
+- name: Generate or update alertmanager config.
+  become: true
+  ansible.builtin.template:
+    src: alertmanager-config.yml.j2
+    dest: "{{ appdata_path }}/{{ item.name }}/config.yml"
+    owner: "{{ path_file_owner }}"
+    group: "{{ path_file_group }}"
+    mode: "{{ file_mode }}"
+  notify: Restart alertmanager

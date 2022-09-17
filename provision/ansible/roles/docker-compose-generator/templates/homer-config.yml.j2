@@ -71,7 +71,7 @@ services:
     icon: "fas fa-play"
     items:
 {% for container in containers %}
-{% if container.ports is defined and container.homer_category is defined and container.homer_category == "media" %}
+{% if container.enabled and container.ports is defined and container.homer_category is defined and container.homer_category == "media" %}
       - name: {{ container.name }}
         logo: "assets/tools/homer-icons/png/{{ container.homer_icon }}.png"
         url: "http://{{ ansible_host }}:{{ container.ports.0.split(":").0 }}"
@@ -79,18 +79,34 @@ services:
 {% endfor %}
       - name: "GoPlay"
         logo: "assets/tools/homer-icons/png/emby.png"
-        url: "https://goplay.anontpp.com/"
+        url: "https://goplay.ml/"
       - name: "YouTube"
         logo: "assets/tools/homer-icons/png/youtube.png"
         url: "https://www.youtube.com/feed/subscriptions"
       - name: "Twitch"
-        logo: "assets/tools/homer-icons/png/peertube.png"
+        logo: "assets/tools/homer-icons/png/tvheadend.png"
         url: "https://www.twitch.tv/directory/following"
+  - name: Sports
+    icon: "fas fa-volleyball"
+    items:
+{% for container in containers %}
+{% if container.enabled and container.ports is defined and container.homer_category is defined and container.homer_category == "sports" %}
+      - name: {{ container.name }}
+        logo: "assets/tools/homer-icons/png/{{ container.homer_icon }}.png"
+        url: "http://{{ ansible_host }}:{{ container.ports.0.split(":").0 }}"
+{% endif %}
+{% endfor %}
+      - name: "Volleyball World TV"
+        logo: "assets/tools/homer-icons/png/grav.png"
+        url: "https://volleyballworld.tv/schedule"
+      - name: "Volleyball World"
+        logo: "assets/tools/homer-icons/png/grav.png"
+        url: "https://en.volleyballworld.com/"
   - name: Server
     icon: "fas fa-server"
     items:
 {% for container in containers %}
-{% if container.ports is defined and container.homer_category is defined and container.homer_category == "server" %}
+{% if container.enabled and container.ports is defined and container.homer_category is defined and container.homer_category == "server" %}
       - name: {{ container.name }}
         logo: "assets/tools/homer-icons/png/{{ container.homer_icon }}.png"
         url: "http://{{ ansible_host }}:{{ container.ports.0.split(":").0 }}"
@@ -105,16 +121,29 @@ services:
       - name: "pfSense"
         logo: "assets/tools/homer-icons/png/pfsense.png"
         url: "https://192.168.13.1:10443/"
-  - name: Download Clients
-    icon: "fas fa-cloud-download-alt"
+  - name: Monitoring
+    icon: "fas fa-chart-pie"
     items:
 {% for container in containers %}
-{% if container.ports is defined and container.homer_category is defined and container.homer_category == "download clients" %}
+{% if container.enabled and container.ports is defined and container.homer_category is defined and container.homer_category == "monitoring" %}
       - name: {{ container.name }}
         logo: "assets/tools/homer-icons/png/{{ container.homer_icon }}.png"
         url: "http://{{ ansible_host }}:{{ container.ports.0.split(":").0 }}"
 {% endif %}
 {% endfor %}
+  - name: Download Clients
+    icon: "fas fa-cloud-download-alt"
+    items:
+{% for container in containers %}
+{% if container.enabled and container.ports is defined and container.homer_category is defined and container.homer_category == "download clients" %}
+      - name: {{ container.name }}
+        logo: "assets/tools/homer-icons/png/{{ container.homer_icon }}.png"
+        url: "http://{{ ansible_host }}:{{ container.ports.0.split(":").0 }}"
+{% endif %}
+{% endfor %}
+      - name: "qbittorrent"
+        logo: "assets/tools/homer-icons/png/qbittorrent.png"
+        url: "https://flow.seedhost.eu/manav/qbittorrent/"
       - name: "ruTorrent"
         logo: "assets/tools/homer-icons/png/rutorrent.png"
         url: "https://flow.seedhost.eu/manav/rutorrent/"
@@ -122,7 +151,7 @@ services:
     icon: "fas fa-file-download"
     items:
 {% for container in containers %}
-{% if container.ports is defined and container.homer_category is defined and container.homer_category == "private tracker" %}
+{% if container.enabled and container.ports is defined and container.homer_category is defined and container.homer_category == "private tracker" %}
       - name: {{ container.name }}
         logo: "assets/tools/homer-icons/png/{{ container.homer_icon }}.png"
         url: "http://{{ ansible_host }}:{{ container.ports.0.split(":").0 }}"
@@ -138,7 +167,7 @@ services:
     icon: "fas fa-download"
     items:
 {% for container in containers %}
-{% if container.ports is defined and container.homer_category is defined and container.homer_category == "request management" %}
+{% if container.enabled and container.ports is defined and container.homer_category is defined and container.homer_category == "request management" %}
       - name: {{ container.name }}
         logo: "assets/tools/homer-icons/png/{{ container.homer_icon }}.png"
         url: "http://{{ ansible_host }}:{{ container.ports.0.split(":").0 }}"
@@ -157,15 +186,6 @@ services:
         url: "https://myanimelist.net/animelist/iFluffy?status=1"
       - name: "MyDramaList"
         url: "https://mydramalist.com/dramalist/manav"
-  - name: Services
-    icon: "fas fa-cubes"
-    items:
       - name: "GitHub"
         logo: "assets/tools/homer-icons/png/github.png"
         url: "https://github.com/singhmanavjot"
-      - name: "Google Drive"
-        url: "https://drive.google.com/drive/my-drive"
-      - name: "Monkeytype"
-        url: "https://monkeytype.com/"
-      - name: "Raiffeisen"
-        url: "https://sso.raiffeisen.at/mein-login/identify"
