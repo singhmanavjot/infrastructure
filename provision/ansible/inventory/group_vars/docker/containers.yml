@@ -219,8 +219,8 @@ containers:
     volumes:
       - "{{ appdata_path }}/alertmanager:/etc/alertmanager"
     command:
-      - '--config.file=/etc/alertmanager/config.yml'
-      - '--storage.path=/alertmanager'
+      - "--config.file=/etc/alertmanager/config.yml"
+      - "--storage.path=/alertmanager"
     include_global_env_vars: true
     ports:
       - 9093:9093
