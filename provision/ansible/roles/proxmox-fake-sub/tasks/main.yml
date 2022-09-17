@@ -7,7 +7,7 @@
   block:
     - name: Install pve-fake-subscription.
       ansible.builtin.apt:
-        deb: https://github.com/Jamesits/pve-fake-subscription/releases/download/v0.0.7/pve-fake-subscription_0.0.7_all.deb
+        deb: https://github.com/Jamesits/pve-fake-subscription/releases/download/v0.0.8/pve-fake-subscription_0.0.8_all.deb
 
     - name: Prevent fake keys from checking against proxmox servers.
       ansible.builtin.lineinfile:

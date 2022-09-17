@@ -1,6 +1,7 @@
 ---
 - name: Define roles for all hosts.
   hosts: all
+  become: true
 
   roles:
     - role: geerlingguy.ntp

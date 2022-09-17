@@ -206,10 +206,6 @@ containers:
       - "{{ appdata_path }}/grafana:/var/lib/grafana"
     include_global_env_vars: true
     user: "{{ path_file_owner }}"
-    environment:
-      - GF_SECURITY_ADMIN_USER={{ grafana_user }}
-      - GF_SECURITY_ADMIN_PASSWORD={{ grafana_passwd }}
-      - GF_USERS_ALLOW_SIGN_UP=false
     ports:
       - 3000:3000
     mem_limit: 512m
@@ -241,3 +237,17 @@ containers:
       - DISCORD_WEBHOOK={{ alertmanager_discord_webhook }}
     mem_limit: 128m
     restart: unless-stopped
+
+  - name: influxdb2
+    enabled: true
+    image: influxdb:2.4.0-alpine
+    volumes:
+      - "{{ appdata_path }}/influxdb2/config:/etc/influxdb2"
+      - "{{ appdata_path }}/influxdb2/data:/var/lib/influxdb2"
+    include_global_env_vars: true
+    ports:
+      - 8086:8086
+    mem_limit: 2048m
+    restart: unless-stopped
+    homer_category: monitoring
+    homer_icon: prometheus
