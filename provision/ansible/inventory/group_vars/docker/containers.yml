@@ -91,7 +91,7 @@ containers:
     include_global_env_vars: true
     ports:
       - 9898:8989
-    mem_limit: 512m
+    mem_limit: 1024m
     restart: unless-stopped
     homer_category: request management
     homer_icon: sonarr
@@ -121,7 +121,7 @@ containers:
       - 7359:7359/udp
     devices:
       - /dev/dri:/dev/dri
-    mem_limit: 4096m
+    mem_limit: 8192m
     restart: unless-stopped
     homer_category: media
     homer_icon: jellyfin
