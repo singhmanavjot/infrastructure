@@ -1,0 +1,41 @@
+---
+- name: Create or update group for {{ user_name }}
+  become: true
+  ansible.builtin.group:
+    name: "{{ user_name }}"
+    state: present
+  when: user_create_group
+
+- name: Create or update user account for {{ user_name }}
+  become: true
+  ansible.builtin.user:
+    name: "{{ user_name }}"
+    group: "{{ user_name }}"
+    shell: "{{ user_shell }}"
+    state: present
+    comment: "{{ user_comment }}"
+    password: "{{ user_password }}"
+
+- name: Create or update sudoers file for {{ user_name }}
+  become: true
+  ansible.builtin.template:
+    src: sudoers.j2
+    dest: /etc/sudoers.d/{{ user_name }}
+    owner: root
+    group: root
+    mode: 0440
+  when: user_sudoer_permissions|length > 0
+
+- name: Create ssh key pair for {{ user_name }}
+  ansible.builtin.user:
+    name: "{{ user_name }}"
+    generate_ssh_key: true
+    ssh_key_file: "{{ home }}/.ssh/{{ user_name }}"
+    ssh_key_type: ed25519
+  when: user_create_ssh_keys
+
+- name: Add or update authorized key for {{ user_name }}
+  ansible.posix.authorized_key:
+    user: "{{ user_name }}"
+    state: present
+    key: "{{ user_authorized_key }}"

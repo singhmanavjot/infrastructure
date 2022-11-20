@@ -1,6 +1,6 @@
 # .ansible-lint
-warn_list:
-  - internal-error
+# warn_list:
+#   - internal-error
 
 exclude_paths:
   - ../../provision/ansible/galaxy_collections

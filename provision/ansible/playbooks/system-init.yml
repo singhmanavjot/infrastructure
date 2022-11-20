@@ -1,26 +1,48 @@
 ---
-- name: Define roles for all hosts.
-  hosts: all
-  become: true
+- name: Bootstrap all nodes.
+  hosts: bootstrap
 
   roles:
-    - role: geerlingguy.ntp
+    - role: system-config
+      vars:
+        user_name: "{{ secret_user_name }}"
+        user_comment: general user
+        user_password: "{{ secret_user_password }}"
+        user_shell: /bin/bash
+        user_sudoer_permissions: "{{ secret_user_sudoer_permissions }}"
+        user_authorized_key: "{{ secret_user_authorized_key }}"
+        user_create_group: true
+        hostname_set_name: true
 
-- name: Define roles for proxmox hosts.
+- name: Define roles for proxmox nodes.
   hosts: proxmox
 
   roles:
     - role: proxmox-free-repo
     - role: proxmox-fake-sub
 
-- name: Define roles for docker hosts.
-  hosts: docker
+- name: Define roles for all nodes.
+  hosts: nodes
+  become: true
 
   roles:
-    - role: devsec.hardening.os_hardening
-    - role: devsec.hardening.ssh_hardening
+    - role: geerlingguy.ntp
     - role: geerlingguy.docker
+    - role: artis3n.tailscale
+
+- name: Define roles for securing nodes.
+  hosts: security
+  become: true
+
+  roles:
+    # - role: devsec.hardening.os_hardening
+    - role: devsec.hardening.ssh_hardening
+
+- name: Define roles for media nodes.
+  hosts: media
+
+  roles:
     - role: nfs-mount
       vars:
         mount_path: /mnt/data
-        mount_src: "{{ nfs_share }}"
+        mount_src: "{{ nfs_media_share }}"

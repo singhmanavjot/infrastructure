@@ -1,0 +1,4 @@
+---
+user_create_group: false
+user_create_ssh_keys: false
+hostname_set_name: false

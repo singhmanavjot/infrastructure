@@ -1,7 +1,5 @@
 ---
-# Role geerlingguy.ntp
-ntp_timezone: Europe/Vienna
-
 # Role geerlingguy.docker
 docker_users:
   - "{{ ansible_user }}"
+docker_install_compose_plugin: true

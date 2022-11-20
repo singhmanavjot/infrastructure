@@ -1,16 +1,19 @@
 ---
 - name: Ensure enterprise repository file is absent.
+  become: true
   ansible.builtin.file:
     path: /etc/apt/sources.list.d/pve-enterprise.list
     state: absent
 
 - name: Ensure no subscription repository is present.
+  become: true
   ansible.builtin.apt_repository:
     repo: deb http://download.proxmox.com/debian/pve {{ ansible_distribution_release }} pve-no-subscription
     filename: pve-no-subscription
     state: present
 
 - name: Ensure all packages are up to date.
+  become: true
   ansible.builtin.apt:
     upgrade: full
     update_cache: true
