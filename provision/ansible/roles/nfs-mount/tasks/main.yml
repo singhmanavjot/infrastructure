@@ -1,10 +1,12 @@
 ---
 - name: Ensure nfs packages are available.
-  ansible.builtin.dnf:
-    name: nfs-utils
+  become: true
+  ansible.builtin.apt:
+    name: nfs-common
     state: present
 
 - name: Create or update mount directory.
+  become: true
   ansible.builtin.file:
     path: "{{ mount_path }}"
     state: directory
@@ -13,6 +15,7 @@
     mode: "{{ mode }}"
 
 - name: Mount nfs volume.
+  become: true
   ansible.posix.mount:
     src: "{{ mount_src }}"
     path: "{{ mount_path }}"

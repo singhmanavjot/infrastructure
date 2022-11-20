@@ -1,0 +1,3 @@
+---
+# Role nfs-mount
+nfs_media_share: "{{ secret_nfs_media_share }}"

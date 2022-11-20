@@ -4,6 +4,8 @@
     manager: "auto"
 
 - name: Ensure pve-fake-subscription is installed.
+  become: true
+  when: "'pve-fake-subscription' not in ansible_facts.packages"
   block:
     - name: Install pve-fake-subscription.
       ansible.builtin.apt:
@@ -13,4 +15,3 @@
       ansible.builtin.lineinfile:
         path: /etc/hosts
         line: 127.0.0.1 shop.maurer-it.com
-  when: "'pve-fake-subscription' not in ansible_facts.packages"

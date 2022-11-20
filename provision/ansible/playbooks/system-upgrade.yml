@@ -1,9 +1,10 @@
 ---
-- name: Define roles for all hosts.
-  hosts: all
+- name: Define tasks for all nodes.
+  hosts: nodes
 
   tasks:
     - name: Ensure all packages are up to date. (Debian)
+      become: true
       ansible.builtin.apt:
         upgrade: full
         update_cache: true
@@ -36,18 +37,14 @@
         msg: Server {{ ansible_hostname }} requires a restart.
       when: reboot_required.stat.exists
 
-- name: Define roles for docker hosts.
-  hosts: docker
-
-  tasks:
     - name: Update docker compose container.
       ansible.builtin.shell: # noqa command-instead-of-shell
-        chdir: "{{ docker_compose_path }}"
+        chdir: "{{ compose_path }}"
         cmd: "{{ docker_update_command }}"
       changed_when: false
 
     - name: Cleanup docker images and volumes.
       ansible.builtin.shell: # noqa command-instead-of-shell
-        chdir: "{{ docker_compose_path }}"
+        chdir: "{{ compose_path }}"
         cmd: "{{ docker_cleanup_command }}"
       changed_when: false

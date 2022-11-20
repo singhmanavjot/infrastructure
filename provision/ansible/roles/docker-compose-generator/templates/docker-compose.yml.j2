@@ -3,7 +3,7 @@ version: "3"
 
 services:
 {% for container in containers %}
-{% if container.enabled %}
+{% if container.enabled | default(true) and container.enabled_on is not defined or (container.enabled_on is defined and ansible_hostname in container.enabled_on) %}
   {{ container.name }}:
     image: {{ container.image }}
     container_name: {{ container.name }}
@@ -46,13 +46,11 @@ services:
       - {{ port }}
 {% endfor %}
 {% endif %}
-{% if ( container.environment is defined ) or ( container.include_global_env_vars is defined and container.include_global_env_vars) %}
+{% if container.environment is defined or global_env_vars is defined %}
     environment:
-{% if container.include_global_env_vars | default(false) %}
 {% for global_var in global_env_vars %}
       - {{ global_var }}
 {% endfor %}
-{% endif %}
 {% if container.environment is defined %}
 {% for env_var in container.environment %}
       - {{ env_var }}
@@ -86,8 +84,7 @@ services:
       - {{ param }}
 {% endfor %}
 {% endif %}
-{% if container.restart is defined %}
-    restart: {{ container.restart }}
-{% endif %}
+    restart: {{ container.restart | default("unless-stopped") }}
+
 {% endif %}
 {% endfor %}
