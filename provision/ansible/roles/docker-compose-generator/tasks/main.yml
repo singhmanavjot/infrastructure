@@ -28,7 +28,12 @@
 - name: Include qbittorrent tasks.
   ansible.builtin.include_tasks: qbittorrent.yml
   with_items: "{{ containers }}"
-  when: item.name == "qbittorrent" and ansible_hostname == "main"
+  when: item.name == "qbittorrent" and ansible_hostname == "docker"
+
+- name: Include recyclarr tasks.
+  ansible.builtin.include_tasks: recyclarr.yml
+  with_items: "{{ containers }}"
+  when: item.name == "recyclarr" and ansible_hostname == "docker"
 
 - name: Generate or update docker-compose file.
   become: true
