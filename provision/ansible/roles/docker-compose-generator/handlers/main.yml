@@ -18,3 +18,8 @@
   ansible.builtin.command:
     chdir: "{{ compose_path }}"
     cmd: docker compose restart alertmanager
+
+- name: Restart recyclarr
+  ansible.builtin.command:
+    chdir: "{{ compose_path }}"
+    cmd: docker compose restart recyclarr

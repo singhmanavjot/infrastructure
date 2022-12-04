@@ -16,6 +16,9 @@ services:
 {% if container.user is defined %}
     user: "{{ container.user }}"
 {% endif %}
+{% if container.init is defined %}
+    init: {{ container.init }}
+{% endif %}
 {% if container.cap_add is defined %}
     cap_add:
 {% for cap in container.cap_add %}

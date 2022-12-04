@@ -48,7 +48,7 @@ containers:
       - "--storage.path=/alertmanager"
     ports:
       - 9093:9093
-    mem_limit: 16m
+    mem_limit: 32m
 
   - name: alertmanager-discord
     enabled_on: monitoring
@@ -206,3 +206,11 @@ containers:
     devices:
       - /dev/dri:/dev/dri
     mem_limit: 8192m
+
+  - name: recyclarr
+    enabled_on: docker
+    image: ghcr.io/recyclarr/recyclarr:3.0
+    init: true
+    volumes:
+      - "{{ appdata_path }}/recyclarr:/config"
+    mem_limit: 128m
