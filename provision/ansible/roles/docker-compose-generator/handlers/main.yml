@@ -1,8 +1,8 @@
 ---
-- name: Restart docker compose
+- name: Start docker compose
   ansible.builtin.shell: # noqa command-instead-of-shell
     chdir: "{{ compose_path }}"
-    cmd: "{{ docker_update_command }}"
+    cmd: "{{ docker_up_command }}"
 
 - name: Restart qbittorrent
   ansible.builtin.command:
@@ -23,3 +23,8 @@
   ansible.builtin.command:
     chdir: "{{ compose_path }}"
     cmd: docker compose restart recyclarr
+
+- name: Restart renovate
+  ansible.builtin.command:
+    chdir: "{{ compose_path }}"
+    cmd: docker compose restart renovate
