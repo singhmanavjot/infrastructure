@@ -11,7 +11,7 @@
       "automerge": true
     }
   ],
-  "docker-compose": {
-    "fileMatch": ["^provision/ansible/invetory/group_vars/.*\\.ya?ml$"]
+  "ansible": {
+    "fileMatch": ["^provision/ansible/inventory/group_vars/.*\\.ya?ml$"]
   }
 }
