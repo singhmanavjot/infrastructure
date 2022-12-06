@@ -60,7 +60,7 @@ containers:
 
   - name: influxdb2
     enabled_on: monitoring
-    image: influxdb:2.4.0-alpine
+    image: influxdb:2.5.1-alpine
     volumes:
       - "{{ appdata_path }}/influxdb2/config:/etc/influxdb2"
       - "{{ appdata_path }}/influxdb2/data:/var/lib/influxdb2"
