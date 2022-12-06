@@ -124,7 +124,7 @@ containers:
 
   - name: qbittorrent
     enabled_on: docker
-    image: cr.hotio.dev/hotio/qbittorrent:release
+    image: cr.hotio.dev/hotio/qbittorrent:release-4.5.0
     ports:
       - 8080:8080
       - 8118:8118
@@ -149,7 +149,7 @@ containers:
 
   - name: radarr
     enabled_on: docker
-    image: lscr.io/linuxserver/radarr
+    image: lscr.io/linuxserver/radarr:4.2.4
     volumes:
       - "{{ appdata_path }}/radarr:/config"
       - /mnt/data:/data
@@ -159,7 +159,7 @@ containers:
 
   - name: sonarr
     enabled_on: docker
-    image: lscr.io/linuxserver/sonarr
+    image: lscr.io/linuxserver/sonarr:3.0.9
     volumes:
       - "{{ appdata_path }}/sonarr:/config"
       - /mnt/data:/data
@@ -169,7 +169,7 @@ containers:
 
   - name: sonarr-anime
     enabled_on: docker
-    image: lscr.io/linuxserver/sonarr
+    image: lscr.io/linuxserver/sonarr:3.0.9
     volumes:
       - "{{ appdata_path }}/sonarr-anime:/config"
       - /mnt/data:/data
@@ -179,7 +179,7 @@ containers:
 
   - name: prowlarr
     enabled_on: docker
-    image: lscr.io/linuxserver/prowlarr:develop
+    image: lscr.io/linuxserver/prowlarr:0.4.9-develop
     volumes:
       - "{{ appdata_path }}/prowlarr:/config"
     ports:
@@ -197,7 +197,7 @@ containers:
 
   - name: jellyfin
     enabled_on: docker
-    image: lscr.io/linuxserver/jellyfin
+    image: lscr.io/linuxserver/jellyfin:10.8.8
     volumes:
       - "{{ appdata_path }}/jellyfin:/config"
       - /mnt/data/media:/data/media
@@ -210,7 +210,7 @@ containers:
 
   - name: recyclarr
     enabled_on: docker
-    image: ghcr.io/recyclarr/recyclarr:3.0
+    image: ghcr.io/recyclarr/recyclarr:3.0.0
     init: true
     volumes:
       - "{{ appdata_path }}/recyclarr:/config"
@@ -218,7 +218,7 @@ containers:
 
   - name: sabnzbd
     enabled_on: docker
-    image: lscr.io/linuxserver/sabnzbd:latest
+    image: lscr.io/linuxserver/sabnzbd:3.7.0
     ports:
       - 8082:8080
     volumes:
@@ -228,7 +228,7 @@ containers:
 
   - name: renovate
     enabled_on: docker
-    image: renovate/renovate:34.50
+    image: renovate/renovate:34.50.1
     environment:
       - RENOVATE_CONFIG_FILE=/config/config.json
     volumes:

@@ -1,6 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "onboardingConfig": { "extends": ["config:base"] },
+  "baseBranches": ["dev", "main"],
   "dependencyDashboard": true,
   "pre-commit": {
     "enabled": true
@@ -9,6 +10,21 @@
     {
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "automerge": true
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["major"],
+      "labels": ["renovate/image", "dep/major"]
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["minor"],
+      "labels": ["renovate/image", "dep/minor"]
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["patch"],
+      "labels": ["renovate/image", "dep/patch"]
     }
   ],
   "ansible": {
