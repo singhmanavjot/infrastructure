@@ -1,0 +1,19 @@
+---
+- name: Create or update wireguard directory.
+  become: true
+  ansible.builtin.file:
+    path: "{{ appdata_path }}/{{ item.name }}/wireguard"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0755
+
+- name: Generate or update wireguard config.
+  become: true
+  ansible.builtin.copy:
+    content: "{{ secret_wireguard_conf }}"
+    dest: "{{ appdata_path }}/{{ item.name }}/wireguard/wg0.conf"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0600
+  notify: Restart qbittorrent

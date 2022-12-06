@@ -1,0 +1,226 @@
+---
+compose_path: /srv
+appdata_path: "{{ compose_path }}"
+docker_update_command: docker compose pull && docker compose down --remove-orphans && docker compose rm && docker compose up -d
+docker_cleanup_command: docker image prune -f && docker volume prune -f
+
+global_env_vars:
+  - PUID={{ current_user.uid }}
+  - PGID={{ current_user.uid }}
+  - TZ=Europe/Vienna
+
+containers:
+  - name: grafana
+    enabled_on: monitoring
+    image: grafana/grafana:9.1.1
+    volumes:
+      - "{{ appdata_path }}/grafana:/var/lib/grafana"
+    user: "{{ current_user.uid  }}"
+    ports:
+      - 3000:3000
+    mem_limit: 64m
+
+  - name: prometheus
+    enabled_on: monitoring
+    image: prom/prometheus:v2.38.0
+    volumes:
+      - "{{ appdata_path }}/prometheus/config:/etc/prometheus"
+      - "{{ appdata_path }}/prometheus/data:/prometheus"
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/etc/prometheus/console_libraries"
+      - "--web.console.templates=/etc/prometheus/consoles"
+      - "--storage.tsdb.retention.time=200h"
+      - "--web.enable-lifecycle"
+    user: "{{ current_user.uid }}"
+    ports:
+      - 9090:9090
+    mem_limit: 512m
+
+  - name: alertmanager
+    enabled_on: monitoring
+    image: prom/alertmanager:v0.24.0
+    volumes:
+      - "{{ appdata_path }}/alertmanager:/etc/alertmanager"
+    command:
+      - "--config.file=/etc/alertmanager/config.yml"
+      - "--storage.path=/alertmanager"
+    ports:
+      - 9093:9093
+    mem_limit: 32m
+
+  - name: alertmanager-discord
+    enabled_on: monitoring
+    image: benjojo/alertmanager-discord:latest
+    environment:
+      - DISCORD_WEBHOOK={{ secret_alertmanager_discord_webhook }}
+    mem_limit: 8m
+
+  - name: influxdb2
+    enabled_on: monitoring
+    image: influxdb:2.4.0-alpine
+    volumes:
+      - "{{ appdata_path }}/influxdb2/config:/etc/influxdb2"
+      - "{{ appdata_path }}/influxdb2/data:/var/lib/influxdb2"
+    ports:
+      - 8086:8086
+    mem_limit: 256m
+
+  - name: nodeexporter
+    image: prom/node-exporter:v1.3.1
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.rootfs=/rootfs"
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
+    ports:
+      - 9100:9100
+    prometheus_scrape: true
+    mem_limit: 16m
+
+  - name: cadvisor
+    image: gcr.io/cadvisor/cadvisor:v0.45.0
+    privileged: "{{ (ansible_hostname == 'docker') | ternary('false', 'true') }}"
+    # devices:
+    #   - /dev/kmsg:/dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /cgroup:/cgroup:ro
+    ports:
+      - 8081:8080
+    prometheus_scrape: true
+    mem_limit: 128m
+
+  - name: flame
+    enabled_on: docker
+    image: pawelmalak/flame:2.3.0
+    volumes:
+      - "{{ appdata_path }}/flame:/app/data"
+    ports:
+      - 5005:5005
+    environment:
+      - PASSWORD={{ secret_flame_password }}
+    mem_limit: 128m
+
+  - name: flame-ts
+    enabled_on: docker
+    image: pawelmalak/flame:2.3.0
+    volumes:
+      - "{{ appdata_path }}/flame-ts:/app/data"
+    ports:
+      - 5006:5005
+    environment:
+      - PASSWORD={{ secret_flame_password }}
+    mem_limit: 128m
+
+  - name: qbittorrent
+    enabled_on: docker
+    image: cr.hotio.dev/hotio/qbittorrent:release
+    ports:
+      - 8080:8080
+      - 8118:8118
+    environment:
+      - UMASK=022
+      - VPN_ENABLED=true
+      - VPN_LAN_NETWORK={{ secret_wireguard_lan_network }}
+      - VPN_CONF=wg0
+      - VPN_ADDITIONAL_PORTS
+      - VPN_IP_CHECK_DELAY=5
+      - VPN_IP_CHECK_EXIT=true
+      - PRIVOXY_ENABLED=false
+    volumes:
+      - "{{ appdata_path }}/qbittorrent:/config"
+      - /mnt/data/torrents:/data/torrents
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+      - net.ipv6.conf.all.disable_ipv6=1
+    mem_limit: 4096m
+
+  - name: radarr
+    enabled_on: docker
+    image: lscr.io/linuxserver/radarr
+    volumes:
+      - "{{ appdata_path }}/radarr:/config"
+      - /mnt/data:/data
+    ports:
+      - 7878:7878
+    mem_limit: 512m
+
+  - name: sonarr
+    enabled_on: docker
+    image: lscr.io/linuxserver/sonarr
+    volumes:
+      - "{{ appdata_path }}/sonarr:/config"
+      - /mnt/data:/data
+    ports:
+      - 8989:8989
+    mem_limit: 512m
+
+  - name: sonarr-anime
+    enabled_on: docker
+    image: lscr.io/linuxserver/sonarr
+    volumes:
+      - "{{ appdata_path }}/sonarr-anime:/config"
+      - /mnt/data:/data
+    ports:
+      - 9898:8989
+    mem_limit: 1024m
+
+  - name: prowlarr
+    enabled_on: docker
+    image: lscr.io/linuxserver/prowlarr:develop
+    volumes:
+      - "{{ appdata_path }}/prowlarr:/config"
+    ports:
+      - 9696:9696
+    mem_limit: 1024m
+
+  - name: jellyseerr
+    enabled_on: docker
+    image: fallenbagel/jellyseerr:1.2.1
+    volumes:
+      - "{{ appdata_path }}/jellyseerr:/app/config"
+    ports:
+      - 5055:5055
+    mem_limit: 512m
+
+  - name: jellyfin
+    enabled_on: docker
+    image: lscr.io/linuxserver/jellyfin
+    volumes:
+      - "{{ appdata_path }}/jellyfin:/config"
+      - /mnt/data/media:/data/media
+    ports:
+      - 8096:8096
+      - 7359:7359/udp
+    devices:
+      - /dev/dri:/dev/dri
+    mem_limit: 8192m
+
+  - name: recyclarr
+    enabled_on: docker
+    image: ghcr.io/recyclarr/recyclarr:3.0
+    init: true
+    volumes:
+      - "{{ appdata_path }}/recyclarr:/config"
+    mem_limit: 128m
+
+  - name: sabnzbd
+    enabled_on: docker
+    image: lscr.io/linuxserver/sabnzbd:latest
+    ports:
+      - 8082:8080
+    volumes:
+      - "{{ appdata_path }}/sabnzbd:/config"
+      - /mnt/data/usenet:/data/usenet
+    mem_limit: 4096m

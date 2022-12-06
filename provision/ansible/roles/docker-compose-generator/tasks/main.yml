@@ -1,41 +1,46 @@
 ---
-- name: Create or update directory for {{ item.name }}.
+- name: Get data for current user.
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+  register: current_user
+
+- name: Create or update directory for {{ item.name }}
   become: true
   ansible.builtin.file:
     path: "{{ appdata_path }}/{{ item.name }}"
     state: directory
-    owner: "{{ path_file_owner }}"
-    group: "{{ path_file_group }}"
-    mode: "{{ path_mode }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0755
   with_items: "{{ containers }}"
-  when: item.enabled and item.volumes is defined
-
-- name: Include homer tasks.
-  ansible.builtin.include_tasks: homer.yml
-  with_items: "{{ containers }}"
-  when: item.name == "homer" and item.enabled
-
-- name: Include qbittorrent-vpn tasks.
-  ansible.builtin.include_tasks: qbittorrent-vpn.yml
-  with_items: "{{ containers }}"
-  when: item.name == "qbittorrent-vpn" and item.enabled
+  when: item.enabled | default(true) and item.enabled_on is not defined or (item.enabled_on is defined and ansible_hostname in item.enabled_on)
 
 - name: Include prometheus tasks.
-  ansible.builtin.include_tasks: prometheus_config.yml
+  ansible.builtin.include_tasks: prometheus-config.yml
   with_items: "{{ containers }}"
-  when: item.name == "prometheus" and item.enabled
+  when: item.name == "prometheus" and ansible_hostname == "monitoring"
 
 - name: Include alertmanager tasks.
   ansible.builtin.include_tasks: alertmanager.yml
   with_items: "{{ containers }}"
-  when: item.name == "alertmanager" and item.enabled
+  when: item.name == "alertmanager" and ansible_hostname == "monitoring"
+
+- name: Include qbittorrent tasks.
+  ansible.builtin.include_tasks: qbittorrent.yml
+  with_items: "{{ containers }}"
+  when: item.name == "qbittorrent" and ansible_hostname == "docker"
+
+- name: Include recyclarr tasks.
+  ansible.builtin.include_tasks: recyclarr.yml
+  with_items: "{{ containers }}"
+  when: item.name == "recyclarr" and ansible_hostname == "docker"
 
 - name: Generate or update docker-compose file.
   become: true
   ansible.builtin.template:
     src: docker-compose.yml.j2
-    dest: "{{ docker_compose_path }}/docker-compose.yml"
-    owner: "{{ path_file_owner }}"
-    group: "{{ path_file_group }}"
-    mode: "{{ file_mode }}"
+    dest: "{{ compose_path }}/docker-compose.yml"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0664
   notify: Restart docker compose

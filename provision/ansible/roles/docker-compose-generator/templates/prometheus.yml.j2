@@ -5,8 +5,8 @@ global:
 
   # Attach these labels to any time series or alerts when communicating with
   # external systems (federation, remote storage, Alertmanager).
-  external_labels:
-      monitor: 'docker-host'
+  # external_labels:
+  #     monitor: 'docker-host'
 
 # Load and evaluate rules in this file every 'evaluation_interval' seconds.
 rule_files:
@@ -15,13 +15,21 @@ rule_files:
 # A scrape configuration containing exactly one endpoint to scrape.
 scrape_configs:
 {% for container in containers %}
-{% if container.enabled and container.ports is defined and container.prometheus_scrape is defined and container.prometheus_scrape %}
-  - job_name: '{{ container.name }}'
+{% if container.prometheus_scrape | default(false) and container.ports is defined %}
+{% for server in groups['nodes'] %}
+  - job_name: '{{hostvars[server]['ansible_facts']['hostname']}}-{{ container.name }}'
     scrape_interval: 5s
     static_configs:
+{% if hostvars[server]['ansible_facts']['hostname'] == ansible_hostname %}
       - targets: ['{{ container.name }}:{{ container.ports.0.split(":").1 }}']
 {% endif %}
+{% if hostvars[server]['ansible_facts']['hostname'] != ansible_hostname %}
+      - targets: ['{{ hostvars[server]['ansible_facts']['default_ipv4']['address'] }}:{{ container.ports.0.split(":").0 }}']
+{% endif %}
 {% endfor %}
+{% endif %}
+{% endfor %}
+
   - job_name: 'prometheus'
     scrape_interval: 5s
     static_configs:

@@ -1,0 +1,6 @@
+---
+- name: Include hostname tasks.
+  ansible.builtin.include_tasks: hostname.yml
+
+- name: Include user tasks.
+  ansible.builtin.include_tasks: user.yml

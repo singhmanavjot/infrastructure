@@ -1,25 +1,25 @@
 ---
 - name: Restart docker compose
   ansible.builtin.shell: # noqa command-instead-of-shell
-    chdir: "{{ docker_compose_path }}"
+    chdir: "{{ compose_path }}"
     cmd: "{{ docker_update_command }}"
 
-- name: Restart homer
+- name: Restart qbittorrent
   ansible.builtin.command:
-    chdir: "{{ docker_compose_path }}"
-    cmd: docker-compose restart homer
-
-- name: Restart qbittorrent-vpn
-  ansible.builtin.command:
-    chdir: "{{ docker_compose_path }}"
-    cmd: docker-compose restart qbittorrent-vpn
+    chdir: "{{ compose_path }}"
+    cmd: docker compose restart qbittorrent
 
 - name: Restart prometheus
   ansible.builtin.command:
-    chdir: "{{ docker_compose_path }}"
-    cmd: docker-compose restart prometheus
+    chdir: "{{ compose_path }}"
+    cmd: docker compose restart prometheus
 
 - name: Restart alertmanager
   ansible.builtin.command:
-    chdir: "{{ docker_compose_path }}"
-    cmd: docker-compose restart alertmanager
+    chdir: "{{ compose_path }}"
+    cmd: docker compose restart alertmanager
+
+- name: Restart recyclarr
+  ansible.builtin.command:
+    chdir: "{{ compose_path }}"
+    cmd: docker compose restart recyclarr

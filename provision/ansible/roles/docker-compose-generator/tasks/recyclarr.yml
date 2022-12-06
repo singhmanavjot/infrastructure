@@ -1,0 +1,10 @@
+---
+- name: Generate or update recyclarr config.
+  become: true
+  ansible.builtin.template:
+    src: recyclarr.yml.j2
+    dest: "{{ appdata_path }}/{{ item.name }}/recyclarr.yml"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0664
+  notify: Restart recyclarr

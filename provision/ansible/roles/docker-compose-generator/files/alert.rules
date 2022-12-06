@@ -390,14 +390,14 @@ groups:
   # 1000 context switches is an arbitrary number.
   # Alert threshold depends on nature of application.
   # Please read: https://github.com/samber/awesome-prometheus-alerts/issues/58
-  - alert: HostContextSwitching
-    expr: (rate(node_context_switches_total[5m])) / (count without(cpu, mode) (node_cpu_seconds_total{mode="idle"})) > 1800
-    for: 0m
-    labels:
-      severity: warning
-    annotations:
-      summary: Host context switching (instance {{ $labels.instance }})
-      description: "Context switching is growing on node (> 1800 / s)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+  #- alert: HostContextSwitching
+  #  expr: (rate(node_context_switches_total[5m])) / (count without(cpu, mode) (node_cpu_seconds_total{mode="idle"})) > 2100
+  #  for: 0m
+  #  labels:
+  #    severity: warning
+  #  annotations:
+  #    summary: Host context switching (instance {{ $labels.instance }})
+  #    description: "Context switching is growing on node (> 2100 / s)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
   - alert: HostSwapIsFillingUp
     expr: (1 - (node_memory_SwapFree_bytes / node_memory_SwapTotal_bytes)) * 100 > 80
@@ -453,14 +453,14 @@ groups:
       summary: Host RAID disk failure (instance {{ $labels.instance }})
       description: "At least one device in RAID array on {{ $labels.instance }} failed. Array {{ $labels.md_device }} needs attention and possibly a disk swap\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
-  - alert: HostKernelVersionDeviations
-    expr: count(sum(label_replace(node_uname_info, "kernel", "$1", "release", "([0-9]+.[0-9]+.[0-9]+).*")) by (kernel)) > 1
-    for: 6h
-    labels:
-      severity: warning
-    annotations:
-      summary: Host kernel version deviations (instance {{ $labels.instance }})
-      description: "Different kernel versions are running\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+#  - alert: HostKernelVersionDeviations
+#    expr: count(sum(label_replace(node_uname_info, "kernel", "$1", "release", "([0-9]+.[0-9]+.[0-9]+).*")) by (kernel)) > 1
+#    for: 6h
+#    labels:
+#      severity: warning
+#    annotations:
+#      summary: Host kernel version deviations (instance {{ $labels.instance }})
+#      description: "Different kernel versions are running\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
   - alert: HostOomKillDetected
     expr: increase(node_vmstat_oom_kill[1m]) > 0
@@ -594,22 +594,22 @@ groups:
 
   # See https://medium.com/faun/how-much-is-too-much-the-linux-oomkiller-and-used-memory-d32186f29c9d
   - alert: ContainerMemoryUsage
-    expr: (sum(container_memory_working_set_bytes{name!=""}) BY (instance, name) / sum(container_spec_memory_limit_bytes > 0) BY (instance, name) * 100) > 80
+    expr: (sum(container_memory_working_set_bytes{name!=""}) BY (instance, name) / sum(container_spec_memory_limit_bytes > 0) BY (instance, name) * 100) > 85
     for: 2m
     labels:
       severity: warning
     annotations:
       summary: Container Memory usage (instance {{ $labels.instance }})
-      description: "Container Memory usage is above 80%\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+      description: "Container Memory usage is above 85%\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
   - alert: ContainerLowMemoryUsage
-    expr: (sum(container_memory_working_set_bytes{name!=""}) BY (instance, name) / sum(container_spec_memory_limit_bytes > 0) BY (instance, name) * 100) < 50
+    expr: (sum(container_memory_working_set_bytes{name!=""}) BY (instance, name) / sum(container_spec_memory_limit_bytes > 0) BY (instance, name) * 100) < 40
     for: 7d
     labels:
       severity: info
     annotations:
       summary: Container Memory usage (instance {{ $labels.instance }})
-      description: "Container Memory usage is under 50%\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+      description: "Container Memory usage is under 40%\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
   - alert: ContainerHighThrottleRate
     expr: rate(container_cpu_cfs_throttled_seconds_total[3m]) > 1
