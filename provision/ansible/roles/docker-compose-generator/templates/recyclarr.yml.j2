@@ -1,9 +1,15 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/recyclarr/recyclarr/master/schemas/config-schema.json
 ---
 radarr:
-  radarr-docker:
+  radarr:
     base_url: http://radarr:7878
     api_key: {{ secret_radarr_api_key }}
 
+    # Quality Definition Settings
+    quality_definition:
+      type: sqp-streaming
+
+    # Custom Format Settings
     custom_formats:
       # Streaming Optimized (SQP-1)
 
@@ -117,3 +123,19 @@ radarr:
           - 2a6039655313bf5dab1e43523b62c374 # MA
         quality_profiles:
           - name: Bluray|WEB-1080p
+
+sonarr:
+  sonarr:
+    base_url: http://sonarr:8989
+    api_key: {{ secret_sonarr_api_key }}
+
+    # Quality Definition Settings
+    quality_definition: series
+
+    # Release Profile Settings
+    release_profiles:
+      - trash_ids:
+          - EBC725268D687D588A20CBC5F97E538B # Low Quality Groups
+          - 1B018E0C53EC825085DD911102E2CA36 # Release Sources (Streaming Service)
+          - 71899E6C303A07AF0E4746EFF9873532 # P2P Groups + Repack/Proper
+          - 76e060895c5b8a765c310933da0a5357 # Optionals

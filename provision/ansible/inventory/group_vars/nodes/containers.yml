@@ -214,3 +214,13 @@ containers:
     volumes:
       - "{{ appdata_path }}/recyclarr:/config"
     mem_limit: 128m
+
+  - name: sabnzbd
+    enabled_on: docker
+    image: lscr.io/linuxserver/sabnzbd:latest
+    ports:
+      - 8082:8080
+    volumes:
+      - "{{ appdata_path }}/sabnzbd:/config"
+      - /mnt/data/usenet:/data/usenet
+    mem_limit: 4096m
