@@ -1,6 +1,7 @@
 ---
 compose_path: /srv
 appdata_path: "{{ compose_path }}"
+docker_up_command: docker compose pull && docker compose up -d
 docker_update_command: docker compose pull && docker compose down --remove-orphans && docker compose rm && docker compose up -d
 docker_cleanup_command: docker image prune -f && docker volume prune -f
 
@@ -224,3 +225,12 @@ containers:
       - "{{ appdata_path }}/sabnzbd:/config"
       - /mnt/data/usenet:/data/usenet
     mem_limit: 4096m
+
+  - name: renovate
+    enabled_on: docker
+    image: renovate/renovate:34.50
+    environment:
+      - RENOVATE_CONFIG_FILE=/config/config.json
+    volumes:
+      - "{{ appdata_path }}/renovate:/config"
+    mem_limit: 2048m
