@@ -13,7 +13,7 @@ global_env_vars:
 containers:
   - name: grafana
     enabled_on: monitoring
-    image: grafana/grafana:9.1.1
+    image: grafana/grafana:9.3.1
     volumes:
       - "{{ appdata_path }}/grafana:/var/lib/grafana"
     user: "{{ current_user.uid  }}"
@@ -23,7 +23,7 @@ containers:
 
   - name: prometheus
     enabled_on: monitoring
-    image: prom/prometheus:v2.38.0
+    image: prom/prometheus:v2.40.5
     volumes:
       - "{{ appdata_path }}/prometheus/config:/etc/prometheus"
       - "{{ appdata_path }}/prometheus/data:/prometheus"
@@ -60,7 +60,7 @@ containers:
 
   - name: influxdb2
     enabled_on: monitoring
-    image: influxdb:2.4.0-alpine
+    image: influxdb:2.5.1-alpine
     volumes:
       - "{{ appdata_path }}/influxdb2/config:/etc/influxdb2"
       - "{{ appdata_path }}/influxdb2/data:/var/lib/influxdb2"
@@ -69,7 +69,7 @@ containers:
     mem_limit: 256m
 
   - name: nodeexporter
-    image: prom/node-exporter:v1.3.1
+    image: prom/node-exporter:v1.5.0
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -85,7 +85,7 @@ containers:
     mem_limit: 16m
 
   - name: cadvisor
-    image: gcr.io/cadvisor/cadvisor:v0.45.0
+    image: gcr.io/cadvisor/cadvisor:v0.46.0
     privileged: "{{ (ansible_hostname == 'docker') | ternary('false', 'true') }}"
     # devices:
     #   - /dev/kmsg:/dev/kmsg
