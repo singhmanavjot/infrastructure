@@ -233,4 +233,5 @@ containers:
       - RENOVATE_CONFIG_FILE=/config/config.json
     volumes:
       - "{{ appdata_path }}/renovate:/config"
+    restart: on-failure
     mem_limit: 2048m
