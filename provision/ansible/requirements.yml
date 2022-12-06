@@ -13,4 +13,4 @@ roles:
   - name: geerlingguy.docker
     version: 5.1.0
   - src: artis3n.tailscale
-    version: v3.3.0
+    version: v3.4.0
