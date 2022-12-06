@@ -1,9 +1,9 @@
 ---
 collections:
   - name: community.sops
-    version: 1.2.3
+    version: 1.5.0
   - name: devsec.hardening
-    version: 8.1.0
+    version: 8.3.0
   - name: ansible.posix
     version: 1.4.0
 
@@ -11,6 +11,6 @@ roles:
   - name: geerlingguy.ntp
     version: 2.3.1
   - name: geerlingguy.docker
-    version: 5.1.0
+    version: 5.2.1
   - src: artis3n.tailscale
-    version: v3.3.0
+    version: v3.4.0
