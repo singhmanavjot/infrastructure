@@ -1,7 +1,17 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "onboardingConfig": { "extends": ["config:base"] },
   "dependencyDashboard": true,
-  "ansible": {
+  "pre-commit": {
+    "enabled": true
+  },
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    }
+  ],
+  "docker-compose": {
     "fileMatch": ["^provision/ansible/invetory/group_vars/.*\\.ya?ml$"]
   }
 }
