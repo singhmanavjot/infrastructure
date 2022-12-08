@@ -197,7 +197,7 @@ containers:
 
   - name: jellyfin
     enabled_on: docker
-    image: lscr.io/linuxserver/jellyfin:10.8.8
+    image: lscr.io/linuxserver/jellyfin:2021.12.16
     volumes:
       - "{{ appdata_path }}/jellyfin:/config"
       - /mnt/data/media:/data/media
