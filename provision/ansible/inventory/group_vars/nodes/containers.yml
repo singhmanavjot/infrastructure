@@ -13,7 +13,7 @@ global_env_vars:
 containers:
   - name: grafana
     enabled_on: monitoring
-    image: grafana/grafana:9.3.1
+    image: grafana/grafana:9.3.2
     volumes:
       - "{{ appdata_path }}/grafana:/var/lib/grafana"
     user: "{{ current_user.uid  }}"
