@@ -41,7 +41,7 @@ containers:
 
   - name: alertmanager
     enabled_on: monitoring
-    image: prom/alertmanager:v0.24.0
+    image: prom/alertmanager:v0.25.0
     volumes:
       - "{{ appdata_path }}/alertmanager:/etc/alertmanager"
     command:
