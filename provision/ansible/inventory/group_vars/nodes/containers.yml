@@ -197,7 +197,7 @@ containers:
 
   - name: jellyfin
     enabled_on: docker
-    image: lscr.io/linuxserver/jellyfin:10.8.8
+    image: lscr.io/linuxserver/jellyfin:latest
     volumes:
       - "{{ appdata_path }}/jellyfin:/config"
       - /mnt/data/media:/data/media
@@ -206,7 +206,7 @@ containers:
       - 7359:7359/udp
     devices:
       - /dev/dri:/dev/dri
-    mem_limit: 8192m
+    mem_limit: 4096m
 
   - name: recyclarr
     enabled_on: docker
@@ -224,7 +224,7 @@ containers:
     volumes:
       - "{{ appdata_path }}/sabnzbd:/config"
       - /mnt/data/usenet:/data/usenet
-    mem_limit: 4096m
+    mem_limit: 1024m
 
   - name: renovate
     enabled_on: docker
@@ -235,3 +235,33 @@ containers:
       - "{{ appdata_path }}/renovate:/config"
     restart: on-failure
     mem_limit: 2048m
+
+  - name: fireflyiii
+    enabled_on: docker
+    image: fireflyiii/core:version-5.7.17
+    depends_on:
+      - postgres-fireflyiii
+    ports:
+      - 8083:8080
+    environment:
+      - APP_KEY={{ secret_fireflyiii_app_key }}
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres-fireflyiii
+      - DB_PORT=5432
+      - DB_DATABASE=firefly
+      - DB_USERNAME=firefly
+      - DB_PASSWORD={{ secret_postgres_fireflyiii_password }}
+    volumes:
+      - "{{ appdata_path }}/fireflyiii:/var/www/html/storage/upload"
+    mem_limit: 256m
+
+  - name: postgres-fireflyiii
+    enabled_on: docker
+    image: postgres:15.1-alpine
+    environment:
+      - POSTGRES_PASSWORD={{ secret_postgres_fireflyiii_password }}
+      - POSTGRES_USER=firefly
+      - POSTGRES_DB=firefly
+    volumes:
+      - "{{ appdata_path }}/postgres-fireflyiii:/var/lib/postgresql/data"
+    mem_limit: 256m
