@@ -8,10 +8,6 @@
   },
   "packageRules": [
     {
-      "matchUpdateTypes": ["minor", "patch", "digest"],
-      "automerge": true
-    },
-    {
       "matchDatasources": ["docker"],
       "matchUpdateTypes": ["major"],
       "labels": ["renovate/image", "dep/major"]
