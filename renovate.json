@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "onboardingConfig": { "extends": ["config:base", ":rebaseStalePrs"] },
-  "baseBranches": ["dev", "main"],
+  "baseBranches": ["main"],
   "dependencyDashboard": true,
   "pre-commit": {
     "enabled": true
