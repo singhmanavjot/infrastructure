@@ -291,7 +291,7 @@ containers:
 
   - name: lidarr
     enabled_on: docker
-    image: lscr.io/linuxserver/lidarr:1.0.2
+    image: lscr.io/linuxserver/lidarr:8.1.2135
     volumes:
       - "{{ appdata_path }}/lidarr:/config"
       - /mnt/data:/data
