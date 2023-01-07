@@ -192,7 +192,7 @@ containers:
     volumes:
       - "{{ appdata_path }}/jellyseerr:/app/config"
     ports:
-      - 5055:5055
+      - 5056:5055
     mem_limit: 512m
 
   - name: jellyfin
@@ -264,3 +264,27 @@ containers:
     volumes:
       - "{{ appdata_path }}/postgres-fireflyiii:/var/lib/postgresql/data"
     mem_limit: 256m
+
+  - name: plex
+    enabled_on: docker
+    image: ghcr.io/linuxserver/plex:1.30.0
+    environment:
+      - VERSION=docker
+      - DOCKER_MODS=linuxserver/mods:plex-absolute-hama
+    ports:
+      - 32400:32400
+    volumes:
+      - "{{ appdata_path }}/plex:/config"
+      - /mnt/data/media:/data/media
+    devices:
+      - /dev/dri:/dev/dri
+    mem_limit: 4096m
+
+  - name: overseerr
+    enabled_on: docker
+    image: lscr.io/linuxserver/overseerr:1.31.0
+    volumes:
+      - "{{ appdata_path }}/overseerr:/config"
+    ports:
+      - 5055:5055
+    mem_limit: 512m
