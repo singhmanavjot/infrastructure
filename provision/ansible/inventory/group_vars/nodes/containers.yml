@@ -288,3 +288,13 @@ containers:
     ports:
       - 5055:5055
     mem_limit: 512m
+
+  - name: lidarr
+    enabled_on: docker
+    image: lscr.io/linuxserver/lidarr:1.0.2
+    volumes:
+      - "{{ appdata_path }}/lidarr:/config"
+      - /mnt/data:/data
+    ports:
+      - 8686:8686
+    mem_limit: 1024m
