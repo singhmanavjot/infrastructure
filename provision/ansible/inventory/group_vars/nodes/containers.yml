@@ -19,7 +19,7 @@ containers:
     user: "{{ current_user.uid  }}"
     ports:
       - 3000:3000
-    mem_limit: 64m
+    mem_limit: 128m
 
   - name: prometheus
     enabled_on: monitoring
@@ -254,9 +254,10 @@ containers:
     volumes:
       - "{{ appdata_path }}/plex:/config"
       - /mnt/data/media:/data/media
+      - /tmp/plex:/transcode
     devices:
       - /dev/dri:/dev/dri
-    mem_limit: 4096m
+    mem_limit: 8192m
 
   - name: overseerr
     enabled_on: docker
@@ -275,4 +276,47 @@ containers:
       - /mnt/data:/data
     ports:
       - 8686:8686
+    mem_limit: 1024m
+
+  - name: vikunja-api
+    enabled_on: docker
+    image: vikunja/api:0.20.1
+    depends_on:
+      - postgres-vikunja
+    volumes:
+      - "{{ appdata_path }}/vikunja-api:/app/vikunja/files"
+    environment:
+      - VIKUNJA_DATABASE_HOST=postgres-vikunja
+      - VIKUNJA_DATABASE_PASSWORD={{ secret_postgres_vikunja_password }}
+      - VIKUNJA_DATABASE_TYPE=postgres
+      - VIKUNJA_DATABASE_USER=vikunja
+      - VIKUNJA_DATABASE_DATABASE=vikunja
+      - VIKUNJA_REDIS_ENABLED=1
+      - VIKUNJA_REDIS_HOST=redis-vikunja:6379
+      - VIKUNJA_CACHE_ENABLED=1
+      - VIKUNJA_CACHE_TYPE=redis
+    ports:
+      - 3456:3456
+    mem_limit: 1024m
+
+  - name: vikunja-frontend
+    enabled_on: docker
+    image: vikunja/frontend:0.20.2
+    ports:
+      - 8000:80
+    mem_limit: 1024m
+
+  - name: postgres-vikunja
+    enabled_on: docker
+    image: postgres:15.1-alpine
+    environment:
+      - POSTGRES_PASSWORD={{ secret_postgres_vikunja_password }}
+      - POSTGRES_USER=vikunja
+    volumes:
+      - "{{ appdata_path }}/postgres-vikunja:/var/lib/postgresql/data"
+    mem_limit: 256m
+
+  - name: redis-vikunja
+    enabled_on: docker
+    image: redis:7.0.7-alpine
     mem_limit: 1024m
