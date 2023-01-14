@@ -85,7 +85,7 @@ containers:
     mem_limit: 16m
 
   - name: cadvisor
-    image: gcr.io/cadvisor/cadvisor:v0.47.0
+    image: gcr.io/cadvisor/cadvisor:v0.47.1
     privileged: "{{ (ansible_hostname == 'docker') | ternary('false', 'true') }}"
     # devices:
     #   - /dev/kmsg:/dev/kmsg
