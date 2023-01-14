@@ -320,3 +320,34 @@ containers:
     enabled_on: docker
     image: redis:7.0.7-alpine
     mem_limit: 1024m
+
+  - name: miniflux
+    enabled_on: docker
+    image: miniflux/miniflux:2.0.41
+    depends_on:
+      - postgres-miniflux
+    environment:
+      - DATABASE_URL=postgres://miniflux:{{ secret_postgres_miniflux_password }}@postgres-miniflux/miniflux?sslmode=disable
+      - RUN_MIGRATIONS=1
+      - CREATE_ADMIN=1
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD={{ secret_miniflux_admin_password }}
+    ports:
+      - 8001:8080
+    healthcheck:
+      test: ["CMD", "/usr/bin/miniflux", "-healthcheck", "auto"]
+    mem_limit: 1024m
+
+  - name: postgres-miniflux
+    enabled_on: docker
+    image: postgres:15.1-alpine
+    environment:
+      - POSTGRES_PASSWORD={{ secret_postgres_miniflux_password }}
+      - POSTGRES_USER=miniflux
+    volumes:
+      - "{{ appdata_path }}/postgres-miniflux:/var/lib/postgresql/data"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "miniflux"]
+      interval: 10s
+      start_period: 30s
+    mem_limit: 256m
