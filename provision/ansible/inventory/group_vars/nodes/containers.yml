@@ -323,7 +323,7 @@ containers:
 
   - name: miniflux
     enabled_on: docker
-    image: miniflux/miniflux:2.0.41
+    image: miniflux/miniflux:2.0.42
     depends_on:
       - postgres-miniflux
     environment:
