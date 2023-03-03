@@ -195,7 +195,7 @@ containers:
 
   - name: sabnzbd
     enabled_on: docker
-    image: lscr.io/linuxserver/sabnzbd:3.7.1
+    image: lscr.io/linuxserver/sabnzbd:3.7.2
     ports:
       - 8082:8080
     volumes:
