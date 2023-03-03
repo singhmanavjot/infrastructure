@@ -234,7 +234,7 @@ containers:
 
   - name: postgres-fireflyiii
     enabled_on: docker
-    image: postgres:15.1-alpine
+    image: postgres:15.2-alpine
     environment:
       - POSTGRES_PASSWORD={{ secret_postgres_fireflyiii_password }}
       - POSTGRES_USER=firefly
@@ -308,7 +308,7 @@ containers:
 
   - name: postgres-vikunja
     enabled_on: docker
-    image: postgres:15.1-alpine
+    image: postgres:15.2-alpine
     environment:
       - POSTGRES_PASSWORD={{ secret_postgres_vikunja_password }}
       - POSTGRES_USER=vikunja
@@ -340,7 +340,7 @@ containers:
 
   - name: postgres-miniflux
     enabled_on: docker
-    image: postgres:15.1-alpine
+    image: postgres:15.2-alpine
     environment:
       - POSTGRES_PASSWORD={{ secret_postgres_miniflux_password }}
       - POSTGRES_USER=miniflux
