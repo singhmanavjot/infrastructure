@@ -205,7 +205,7 @@ containers:
 
   - name: renovate
     enabled_on: docker
-    image: renovate/renovate:34.120.0
+    image: renovate/renovate:34.154.6
     environment:
       - RENOVATE_CONFIG_FILE=/config/config.json
     volumes:
