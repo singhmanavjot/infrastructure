@@ -159,7 +159,7 @@ containers:
 
   - name: sonarr
     enabled_on: docker
-    image: lscr.io/linuxserver/sonarr:3.0.9
+    image: lscr.io/linuxserver/sonarr:3.0.10
     volumes:
       - "{{ appdata_path }}/sonarr:/config"
       - /mnt/data:/data
@@ -169,7 +169,7 @@ containers:
 
   - name: sonarr-anime
     enabled_on: docker
-    image: lscr.io/linuxserver/sonarr:3.0.9
+    image: lscr.io/linuxserver/sonarr:3.0.10
     volumes:
       - "{{ appdata_path }}/sonarr-anime:/config"
       - /mnt/data:/data
