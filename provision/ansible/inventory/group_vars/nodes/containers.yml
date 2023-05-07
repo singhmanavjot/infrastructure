@@ -318,7 +318,7 @@ containers:
 
   - name: redis-vikunja
     enabled_on: docker
-    image: redis:7.0.10-alpine
+    image: redis:7.0.11-alpine
     mem_limit: 1024m
 
   - name: miniflux
