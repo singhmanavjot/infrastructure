@@ -23,7 +23,7 @@ containers:
 
   - name: prometheus
     enabled_on: monitoring
-    image: prom/prometheus:v2.43.0
+    image: prom/prometheus:v2.43.1
     volumes:
       - "{{ appdata_path }}/prometheus/config:/etc/prometheus"
       - "{{ appdata_path }}/prometheus/data:/prometheus"
