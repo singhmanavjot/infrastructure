@@ -69,7 +69,7 @@ containers:
     mem_limit: 256m
 
   - name: nodeexporter
-    image: prom/node-exporter:v1.5.0
+    image: prom/node-exporter:v1.6.0
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
