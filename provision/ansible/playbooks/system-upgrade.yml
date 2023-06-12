@@ -37,12 +37,6 @@
         msg: Server {{ ansible_hostname }} requires a restart.
       when: reboot_required.stat.exists
 
-    - name: Update docker compose container.
-      ansible.builtin.shell: # noqa command-instead-of-shell
-        chdir: "{{ compose_path }}"
-        cmd: "{{ docker_update_command }}"
-      changed_when: false
-
     - name: Cleanup docker images and volumes.
       ansible.builtin.shell: # noqa command-instead-of-shell
         chdir: "{{ compose_path }}"

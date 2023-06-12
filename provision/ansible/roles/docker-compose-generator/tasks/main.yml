@@ -15,16 +15,6 @@
   with_items: "{{ containers }}"
   when: item.enabled | default(true) and item.enabled_on is not defined or (item.enabled_on is defined and ansible_hostname in item.enabled_on)
 
-- name: Include prometheus tasks.
-  ansible.builtin.include_tasks: prometheus-config.yml
-  with_items: "{{ containers }}"
-  when: item.name == "prometheus" and ansible_hostname == "monitoring"
-
-- name: Include alertmanager tasks.
-  ansible.builtin.include_tasks: alertmanager.yml
-  with_items: "{{ containers }}"
-  when: item.name == "alertmanager" and ansible_hostname == "monitoring"
-
 - name: Include qbittorrent tasks.
   ansible.builtin.include_tasks: qbittorrent.yml
   with_items: "{{ containers }}"

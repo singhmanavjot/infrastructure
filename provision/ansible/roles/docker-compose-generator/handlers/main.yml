@@ -9,16 +9,6 @@
     chdir: "{{ compose_path }}"
     cmd: docker compose restart qbittorrent
 
-- name: Restart prometheus
-  ansible.builtin.command:
-    chdir: "{{ compose_path }}"
-    cmd: docker compose restart prometheus
-
-- name: Restart alertmanager
-  ansible.builtin.command:
-    chdir: "{{ compose_path }}"
-    cmd: docker compose restart alertmanager
-
 - name: Restart recyclarr
   ansible.builtin.command:
     chdir: "{{ compose_path }}"
