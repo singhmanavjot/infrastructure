@@ -13,8 +13,3 @@
   ansible.builtin.command:
     chdir: "{{ compose_path }}"
     cmd: docker compose restart recyclarr
-
-- name: Restart renovate
-  ansible.builtin.command:
-    chdir: "{{ compose_path }}"
-    cmd: docker compose restart renovate

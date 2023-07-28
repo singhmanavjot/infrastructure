@@ -25,11 +25,6 @@
   with_items: "{{ containers }}"
   when: item.name == "recyclarr" and ansible_hostname == "docker"
 
-- name: Include renovate tasks.
-  ansible.builtin.include_tasks: renovate.yml
-  with_items: "{{ containers }}"
-  when: item.name == "renovate" and ansible_hostname == "docker"
-
 - name: Generate or update docker-compose file.
   become: true
   ansible.builtin.template:

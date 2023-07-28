@@ -103,16 +103,6 @@ containers:
       - /mnt/data/usenet:/data/usenet
     mem_limit: 1024m
 
-  - name: renovate
-    enabled_on: docker
-    image: renovate/renovate:35.115.2
-    environment:
-      - RENOVATE_CONFIG_FILE=/config/config.json
-    volumes:
-      - "{{ appdata_path }}/renovate:/config"
-    restart: on-failure
-    mem_limit: 2048m
-
   - name: fireflyiii
     enabled_on: docker
     image: fireflyiii/core:version-5.7.17
