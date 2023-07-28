@@ -151,7 +151,7 @@ containers:
 
   - name: overseerr
     enabled_on: docker
-    image: lscr.io/linuxserver/overseerr:1.32.5
+    image: lscr.io/linuxserver/overseerr:1.33.1
     volumes:
       - "{{ appdata_path }}/overseerr:/config"
     ports:
