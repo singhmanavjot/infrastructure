@@ -13,7 +13,7 @@ global_env_vars:
 containers:
   - name: flame
     enabled_on: docker
-    image: pawelmalak/flame:2.3.0
+    image: pawelmalak/flame:2.3.1
     volumes:
       - "{{ appdata_path }}/flame:/app/data"
     ports:
