@@ -9,7 +9,7 @@ collections:
 
 roles:
   - name: geerlingguy.ntp
-    version: 2.3.2
+    version: 2.3.3
   - name: geerlingguy.docker
     version: 6.2.0
   - src: artis3n.tailscale
