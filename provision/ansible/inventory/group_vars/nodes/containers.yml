@@ -88,7 +88,7 @@ containers:
 
   - name: recyclarr
     enabled_on: docker
-    image: ghcr.io/recyclarr/recyclarr:4.4.1
+    image: ghcr.io/recyclarr/recyclarr:5.4.3
     volumes:
       - "{{ appdata_path }}/recyclarr:/config"
     mem_limit: 128m
