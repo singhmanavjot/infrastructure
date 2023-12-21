@@ -11,6 +11,6 @@ roles:
   - name: geerlingguy.ntp
     version: 2.3.3
   - name: geerlingguy.docker
-    version: 6.2.0
+    version: 7.0.2
   - src: artis3n.tailscale
     version: v4.2.2
