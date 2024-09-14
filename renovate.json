@@ -4,8 +4,6 @@
     "config:best-practices", 
     ":automergeMinor"
   ] 
-  "baseBranches": ["main"],
-  "dependencyDashboard": true,
   "pre-commit": {
     "enabled": true
   },
