@@ -38,7 +38,7 @@ tasks:
     desc: Upgrade all servers and vms
     dir: provision/ansible
     cmds:
-      - "ansible-playbook -i {{.ANSIBLE_INVENTORY_DIR}}/hosts.yml {{.ANSIBLE_PLAYBOOK_DIR}}/system-upgrade.yml"
+      - "ansible-playbook -k -i {{.ANSIBLE_INVENTORY_DIR}}/hosts.yml {{.ANSIBLE_PLAYBOOK_DIR}}/system-upgrade.yml"
 
   playbook:system-init:
     desc: Initialize all servers and vms
@@ -50,4 +50,4 @@ tasks:
     desc: Install container on docker hosts.
     dir: provision/ansible
     cmds:
-      - "ansible-playbook -i {{.ANSIBLE_INVENTORY_DIR}}/hosts.yml {{.ANSIBLE_PLAYBOOK_DIR}}/container-install.yml"
+      - "ansible-playbook -k -i {{.ANSIBLE_INVENTORY_DIR}}/hosts.yml {{.ANSIBLE_PLAYBOOK_DIR}}/container-install.yml"

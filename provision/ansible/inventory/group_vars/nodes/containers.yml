@@ -24,7 +24,7 @@ containers:
 
   - name: qbittorrent
     enabled_on: docker
-    image: ghcr.io/hotio/qbittorrent:release-4.5.5
+    image: ghcr.io/hotio/qbittorrent:release-4.6.4
     ports:
       - 8080:8080
       - 8118:8118
