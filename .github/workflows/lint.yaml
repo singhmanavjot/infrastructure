@@ -3,9 +3,9 @@ name: Lint
 
 on: # yamllint disable-line rule:truthy
   workflow_dispatch:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
 
 concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
