@@ -3,7 +3,7 @@
   "extends": [
     "config:best-practices", 
     ":automergeMinor"
-  ] 
+  ], 
   "pre-commit": {
     "enabled": true
   },
