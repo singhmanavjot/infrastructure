@@ -13,7 +13,7 @@ global_env_vars:
 containers:
   - name: flame
     enabled_on: docker
-    image: pawelmalak/flame:2.3.1
+    image: pawelmalak/flame:2.3.1@sha256:ed331453caf5ad167b8cc4c6d03d855e7a1d11e7387aa7c4c312cf0680dbe601
     volumes:
       - "{{ appdata_path }}/flame:/app/data"
     ports:
@@ -24,7 +24,7 @@ containers:
 
   - name: qbittorrent
     enabled_on: docker
-    image: ghcr.io/hotio/qbittorrent:release-4.6.4
+    image: ghcr.io/hotio/qbittorrent:release-4.6.4@sha256:39829b3e092a91fb15f6696d5a8b762a2da6436ff59e529e13305e6bfb52f829
     ports:
       - 8080:8080
       - 8118:8118
@@ -49,7 +49,7 @@ containers:
 
   - name: radarr
     enabled_on: docker
-    image: lscr.io/linuxserver/radarr:4.7.5
+    image: lscr.io/linuxserver/radarr:4.7.5@sha256:a7e8acff3f429351d2dfa1c887d751d13b8e974cd423841ed52be4203a4b1941
     volumes:
       - "{{ appdata_path }}/radarr:/config"
       - /mnt/data:/data
@@ -59,7 +59,7 @@ containers:
 
   - name: sonarr
     enabled_on: docker
-    image: lscr.io/linuxserver/sonarr:3.0.10
+    image: lscr.io/linuxserver/sonarr:3.0.10@sha256:4f69472a0cdea29e23967db6a3395487539b759def3920327d1f49ae00b9dfd4
     volumes:
       - "{{ appdata_path }}/sonarr:/config"
       - /mnt/data:/data
@@ -69,7 +69,7 @@ containers:
 
   - name: sonarr-anime
     enabled_on: docker
-    image: lscr.io/linuxserver/sonarr:3.0.10
+    image: lscr.io/linuxserver/sonarr:3.0.10@sha256:4f69472a0cdea29e23967db6a3395487539b759def3920327d1f49ae00b9dfd4
     volumes:
       - "{{ appdata_path }}/sonarr-anime:/config"
       - /mnt/data:/data
@@ -79,7 +79,7 @@ containers:
 
   - name: prowlarr
     enabled_on: docker
-    image: lscr.io/linuxserver/prowlarr:1.24.0-develop
+    image: lscr.io/linuxserver/prowlarr:1.24.0-develop@sha256:a0b464915a1b6f98b749aec41c62c716b9ef0c0490ed556505f138c3355e2a16
     volumes:
       - "{{ appdata_path }}/prowlarr:/config"
     ports:
@@ -88,14 +88,14 @@ containers:
 
   - name: recyclarr
     enabled_on: docker
-    image: ghcr.io/recyclarr/recyclarr:4.4.1
+    image: ghcr.io/recyclarr/recyclarr:4.4.1@sha256:825ab392a0f99e8eaa6c0d1468eae83f9dab449eff7456f011a2fbfd82330bf8
     volumes:
       - "{{ appdata_path }}/recyclarr:/config"
     mem_limit: 128m
 
   - name: sabnzbd
     enabled_on: docker
-    image: lscr.io/linuxserver/sabnzbd:4.3.3
+    image: lscr.io/linuxserver/sabnzbd:4.3.3@sha256:cf7743af338e1cdfc97f6e6c605c8c45d737a4f268ab96ba6cec565134cea5e1
     ports:
       - 8082:8080
     volumes:
@@ -105,7 +105,7 @@ containers:
 
   - name: plex
     enabled_on: docker
-    image: ghcr.io/linuxserver/plex:1.41.0
+    image: ghcr.io/linuxserver/plex:1.41.0@sha256:0c4e1981b23c3bdf2892cb9b85c299137af55390044dd5cfdd33bdbc4e32ee1f
     environment:
       - VERSION=docker
       - DOCKER_MODS=linuxserver/mods:plex-absolute-hama
@@ -121,7 +121,7 @@ containers:
 
   - name: overseerr
     enabled_on: docker
-    image: lscr.io/linuxserver/overseerr:1.33.2
+    image: lscr.io/linuxserver/overseerr:1.33.2@sha256:51cc0140a896591aee450170c9cf7af07a8a282cc43b8db8396f93186ab54425
     volumes:
       - "{{ appdata_path }}/overseerr:/config"
     ports:
