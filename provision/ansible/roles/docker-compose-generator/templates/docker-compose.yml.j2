@@ -1,6 +1,4 @@
 ---
-version: "3"
-
 services:
 {% for container in containers %}
 {% if container.enabled | default(true) and container.enabled_on is not defined or (container.enabled_on is defined and ansible_hostname in container.enabled_on) %}

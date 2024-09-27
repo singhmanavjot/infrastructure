@@ -1,142 +1,214 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/recyclarr/recyclarr/master/schemas/config-schema.json
 ---
+###################################################################################################
+# Recyclarr Configuration Template: SQP-2                                                         #
+# Updated: 2024-08-08                                                                             #
+# Documentation: https://recyclarr.dev                                                            #
+# Note: If you are using multiple profiles in a single instance, please read the following        #
+# documentation about file merging:                                                               #
+# https://recyclarr.dev/wiki/yaml/config-examples/#merge-single-instance                          #
+###################################################################################################
+
+# Instance Definition: https://recyclarr.dev/wiki/yaml/config-reference/basic/
 radarr:
-  radarr:
+  sqp-2:
     base_url: http://radarr:7878
     api_key: {{ secret_radarr_api_key }}
 
-    # Quality Definition Settings
-    quality_definition:
-      type: sqp-streaming
+    # Media Naming Configuration
+    media_naming:
+      folder: plex-imdb
+      movie:
+        rename: true
+        standard: plex-imdb
 
-    # Custom Format Settings
+    include:
+      # Comment out any of the following includes to disable them
+      - template: radarr-quality-definition-sqp-uhd
+      - template: radarr-quality-profile-sqp-2
+      - template: radarr-custom-formats-sqp-2
+
+# Custom Formats: https://recyclarr.dev/wiki/yaml/config-reference/custom-formats/
     custom_formats:
-      # Streaming Optimized (SQP-1)
-
-      # Audio
-      - trash_ids:
-          - 496f355514737f7d83bf7aa4d24f8169 # TrueHD ATMOS
-          - 2f22d89048b01681dde8afe203bf2e95 # DTS X
-          - 3cafb66171b47f226146a0770576870f # TrueHD
-          - dcf3ec6938fa32445f590a4da84256cd # DTS-HD MA
-          - 8e109e50e0a0b83a5098b056e13bf6db # DTS-HD HRA
-          - f9f847ac70a0af62ea4a08280b859636 # DTS-ES
-        quality_profiles:
-          - name: Bluray|WEB-1080p
-            score: -10000
-
-      - trash_ids:
-          - 417804f7f2c4308c1f4c5d380d4c4475 # ATMOS (undefined)
-          - 1af239278386be2919e1bcee0bde047e # DD+ ATMOS
-          - a570d4a0e56a2874b64e5bfa55202a1b # FLAC
-          - e7c2fcae07cbada050a0af3357491d7b # PCM
-          - 185f1dd7264c4562b9022d963ac37424 # DD+
-          - 1c1a4c5e823891c75bc50380a6866f73 # DTS
-          - 240770601cc226190c367ef59aba7463 # AAC
-          - c2998bd0d90ed5621d8df281e839436e # DD
-        quality_profiles:
-          - name: Bluray|WEB-1080p
-            score: 0
-
       # Movie Versions
       - trash_ids:
-          - 0f12c086e289cf966fa5948eac571f44 # Hybrid
-          - 570bc9ebecd92723d2d21500f4be314c # Remaster
-          - eca37840c13c6ef2dd0262b141a5482f # 4K Remaster
-          - e0c07d59beb37348e975a930d5e50319 # Criterion Collection
-          - 957d0f44b592285f26449575e8b1167e # Special Edition
-          - eecf3a857724171f968a66cb5719e152 # IMAX
           - 9f6cbff8cfe4ebbc1bde14c7b7bec0de # IMAX Enhanced
-        quality_profiles:
-          - name: Bluray|WEB-1080p
-
-      # HQ Release Groups
-      - trash_ids:
-          - 5153ec7413d9dae44e24275589b5e944 # BHDStudio
-          - c20f169ef63c5f40c2def54abaf4438e # WEB Tier 01
-          - 403816d65392c79236dcb6dd591aeda4 # WEB Tier 02
-          - af94e0fe497124d1f9ce732069ec8c3b # WEB Tier 03
-        quality_profiles:
-          - name: Bluray|WEB-1080p
-
-      - trash_ids:
-          - ed27ebfef2f323e964fb1f61391bcb35 # HD Bluray Tier 01
-        quality_profiles:
-          - name: Bluray|WEB-1080p
-            score: 1100
-
-      - trash_ids:
-          - c20c8647f2746a1f4c4262b0fbbeeeae # HD Bluray Tier 02
-        quality_profiles:
-          - name: Bluray|WEB-1080p
-            score: 1050
+        assign_scores_to:
+          - name: SQP-2
+            # score: 0 # Uncomment this line to disable prioritised IMAX Enhanced releases
 
       # Misc
       - trash_ids:
-          - e7718d7a3ce595f289bfee26adc178f5 # Repack/Proper
-          - ae43b294509409a6a13919dedd4764c4 # Repack2
-        quality_profiles:
-          - name: Bluray|WEB-1080p
+          - 2899d84dc9372de3408e6d8cc18e9666 # x264
+        assign_scores_to:
+          - name: SQP-2
+            # score: 0 # Uncomment this line to enable x264 releases
 
       # Unwanted
       - trash_ids:
-          - ed38b889b31be83fda192888e2286d83 # BR-DISK
-          - 90a6f9a284dff5103f6346090e6280c8 # LQ
-          - b8cd450cbfa689c0259a01d9e29ba3d6 # 3D
-          - dc98083864ea246d05a42df0d05f81cc # x265 (HD)
-        quality_profiles:
-          - name: Bluray|WEB-1080p
+          # Uncomment the next six lines to block all x265 HD releases
+          # - 839bea857ed2c0a8e084f3cbdbd65ecb # x265 (no HDR/DV)
+        # assign_scores_to:
+          # - name: SQP-2
+            # score: 0
+      # - trash_ids:
+          # - dc98083864ea246d05a42df0d05f81cc # x265 (HD)
+        assign_scores_to:
+          - name: SQP-2
 
       # Optional
       - trash_ids:
-          - b6832f586342ef70d9c128d40c07b872 # Bad Dual Groups
-          - 90cedc1fea7ea5d11298bebd3d1d3223 # EVO (no WEBDL)
-          - ae9b7c9ebde1f3bd336a8cbd1ec4c5e5 # No-RlsGroup
-          - 7357cf5161efbf8c4d5d0c30b4815ee2 # Obfuscated
-          - 5c44f52a8714fdd79bb4d98e2673be1f # Retags
-          - f537cf427b64c38c8e36298f657e4828 # Scene
-        quality_profiles:
-          - name: Bluray|WEB-1080p
+          # Uncomment the next two lines if you have a setup that supports HDR10+
+          - b17886cb4158d9fea189859409975758 # HDR10+ Boost
+          - 55a5b50cb416dea5a50c4955896217ab # DV HDR10+ Boost
 
-      # Resolution
+          # Comment out the next line if you and all of your users' setups are fully DV compatible
+          - 923b6abef9b17f937fab56cfcf89e1f1 # DV (WEBDL)
+
+          # Uncomment any of the following if you want them to be added to the quality profile
+          # - b6832f586342ef70d9c128d40c07b872 # Bad Dual Groups
+          # - 90cedc1fea7ea5d11298bebd3d1d3223 # EVO (no WEBDL)
+          # - ae9b7c9ebde1f3bd336a8cbd1ec4c5e5 # No-RlsGroup
+          # - 7357cf5161efbf8c4d5d0c30b4815ee2 # Obfuscated
+          # - 5c44f52a8714fdd79bb4d98e2673be1f # Retags
+          # - f537cf427b64c38c8e36298f657e4828 # Scene
+          # - f700d29429c023a5734505e77daeaea7 # DV (Disk)
+        assign_scores_to:
+          - name: SQP-2
+
+      # Optional SDR
+      # Only ever use ONE of the following custom formats:
+      # SDR - block ALL SDR releases
+      # SDR (no WEBDL) - block UHD/4k Remux and Bluray encode SDR releases, but allow SDR WEB
       - trash_ids:
-          - 820b09bb9acbfde9c35c71e0e565dad8 # 1080p
-          - b2be17d608fc88818940cd1833b0b24c # 720p
-        quality_profiles:
-          - name: Bluray|WEB-1080p
+          - 9c38ebb7384dada637be8899efa68e6f # SDR
+          # - 25c12f78430a3a23413652cbd1d48d77 # SDR (no WEBDL)
+        assign_scores_to:
+          - name: SQP-2
 
-      # Streaming Services
-      - trash_ids:
-          - b3b3a6ac74ecbd56bcdbefa4799fb9df # AMZN
-          - 40e9380490e748672c2522eaaeb692f7 # ATVP
-          - 84272245b2988854bfb76a16e60baea5 # DSNP
-          - 5763d1b0ce84aff3b21038eea8e9b8ad # HMAX
-          - 526d445d4c16214309f0fd2b3be18a89 # Hulu
-          - 170b1d363bd8516fbf3a3eb05d4faff6 # NF
-          - c9fd353f8f5f1baf56dc601c4cb29920 # PCOK
-          - e36a0ba1bc902b26ee40818a1d59b8bd # PMTP
-        quality_profiles:
-          - name: Bluray|WEB-1080p
-            score: 0
+###################################################################################################
+# Recyclarr Configuration Template: WEB-2160p (V4)                                                #
+# Updated: 2024-08-08                                                                             #
+# Documentation: https://recyclarr.dev                                                            #
+# Note: If you are using multiple profiles in a single instance, please read the following        #
+# documentation about file merging:                                                               #
+# https://recyclarr.dev/wiki/yaml/config-examples/#merge-single-instance                          #
+# This config file is for use with Sonarr V4 only                                                 #
+###################################################################################################
 
-      - trash_ids:
-          - 2a6039655313bf5dab1e43523b62c374 # MA
-        quality_profiles:
-          - name: Bluray|WEB-1080p
-
+# Instance Definition: https://recyclarr.dev/wiki/yaml/config-reference/basic/
 sonarr:
-  sonarr:
+  web-2160p-v4:
     base_url: http://sonarr:8989
     api_key: {{ secret_sonarr_api_key }}
 
-    # Quality Definition Settings
-    quality_definition:
-      type: series
+    # Media Naming Configuration
+    media_naming:
+      series: plex-imdb
+      season: default
+      episodes:
+        rename: true
+        standard: default
+        daily: default
+        anime: default
 
-    # Release Profile Settings
-    release_profiles:
+    include:
+      # Comment out any of the following includes to disable them
+      - template: sonarr-quality-definition-series
+      - template: sonarr-v4-quality-profile-web-2160p
+      - template: sonarr-v4-custom-formats-web-2160p
+
+# Custom Formats: https://recyclarr.dev/wiki/yaml/config-reference/custom-formats/
+    custom_formats:
+      # HDR Formats
       - trash_ids:
-          - EBC725268D687D588A20CBC5F97E538B # Low Quality Groups
-          - 1B018E0C53EC825085DD911102E2CA36 # Release Sources (Streaming Service)
-          - 71899E6C303A07AF0E4746EFF9873532 # P2P Groups + Repack/Proper
-          - 76e060895c5b8a765c310933da0a5357 # Optionals
+          # Comment out the next line if you and all of your users' setups are fully DV compatible
+          - 9b27ab6498ec0f31a3353992e19434ca # DV (WEBDL)
+
+          # HDR10+ Boost - Uncomment the next two lines if any of your devices DO support HDR10+
+          - 0dad0a507451acddd754fe6dc3a7f5e7 # HDR10+ Boost
+          - 385e9e8581d33133c3961bdcdeffb7b4 # DV HDR10+ Boost
+        assign_scores_to:
+          - name: WEB-2160p
+
+      # Optional
+      - trash_ids:
+          # - 32b367365729d530ca1c124a0b180c64 # Bad Dual Groups
+          # - 82d40da2bc6923f41e14394075dd4b03 # No-RlsGroup
+          # - e1a997ddb54e3ecbfe06341ad323c458 # Obfuscated
+          # - 06d66ab109d4d2eddb2794d21526d140 # Retags
+          # - 1b3994c551cbb92a2c781af061f4ab44 # Scene
+        assign_scores_to:
+          - name: WEB-2160p
+
+      - trash_ids:
+          # Uncomment the next six lines to allow x265 HD releases with HDR/DV
+          # - 47435ece6b99a0b477caf360e79ba0bb # x265 (HD)
+        # assign_scores_to:
+          # - name: WEB-2160p
+            # score: 0
+      # - trash_ids:
+          # - 9b64dff695c2115facf1b6ea59c9bd07 # x265 (no HDR/DV)
+        assign_scores_to:
+          - name: WEB-2160p
+
+      # Optional SDR
+      # Only ever use ONE of the following custom formats:
+      # SDR - block ALL SDR releases
+      # SDR (no WEBDL) - block UHD/4k Remux and Bluray encode SDR releases, but allow SDR WEB
+      - trash_ids:
+          - 2016d1676f5ee13a5b7257ff86ac9a93 # SDR
+          # - 83304f261cf516bb208c18c54c0adf97 # SDR (no WEBDL)
+        assign_scores_to:
+          - name: WEB-2160p
+
+###################################################################################################
+# Recyclarr Configuration Template: Anime Sonarr                                                  #
+# Updated: 2024-08-08                                                                             #
+# Documentation: https://recyclarr.dev                                                            #
+# Note: If you are using multiple profiles in a single instance, please read the following        #
+# documentation about file merging:                                                               #
+# https://recyclarr.dev/wiki/yaml/config-examples/#merge-single-instance                          #
+# This config file is for use with Sonarr V4 only                                                 #
+###################################################################################################
+
+# Instance Definition: https://recyclarr.dev/wiki/yaml/config-reference/basic/
+  anime-sonarr-v4:
+    base_url: http://sonarr-anime:8989
+    api_key: {{ secret_sonarr_anime_api_key }}
+
+    # Media Naming Configuration
+    media_naming:
+      series: plex-imdb
+      season: default
+      episodes:
+        rename: true
+        standard: default
+        daily: default
+        anime: default
+
+    include:
+      # Comment out any of the following includes to disable them
+      - template: sonarr-quality-definition-anime
+      - template: sonarr-v4-quality-profile-anime
+      - template: sonarr-v4-custom-formats-anime
+
+# Custom Formats: https://recyclarr.dev/wiki/yaml/config-reference/custom-formats/
+    custom_formats:
+      - trash_ids:
+          - 026d5aadd1a6b4e550b134cb6c72b3ca # Uncensored
+        assign_scores_to:
+          - name: Remux-1080p - Anime
+            score: 0 # Adjust scoring as desired
+
+      - trash_ids:
+          - b2550eb333d27b75833e25b8c2557b38 # 10bit
+        assign_scores_to:
+          - name: Remux-1080p - Anime
+            score: 0 # Adjust scoring as desired
+
+      - trash_ids:
+          - 418f50b10f1907201b6cfdf881f467b7 # Anime Dual Audio
+        assign_scores_to:
+          - name: Remux-1080p - Anime
+            score: 0 # Adjust scoring as desired

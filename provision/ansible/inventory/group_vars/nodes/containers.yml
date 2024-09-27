@@ -103,6 +103,15 @@ containers:
       - /mnt/data/usenet:/data/usenet
     mem_limit: 1024m
 
+  - name: tautulli
+    enabled_on: docker
+    image: lscr.io/linuxserver/tautulli:2.14.5
+    ports:
+      - 8181:8181
+    volumes:
+      - "{{ appdata_path }}/tautulli:/config"
+    mem_limit: 512m
+
   - name: plex
     enabled_on: docker
     image: ghcr.io/linuxserver/plex:1.41.0@sha256:0c4e1981b23c3bdf2892cb9b85c299137af55390044dd5cfdd33bdbc4e32ee1f
