@@ -59,7 +59,7 @@ containers:
 
   - name: sonarr
     enabled_on: docker
-    image: lscr.io/linuxserver/sonarr:3.0.10@sha256:4f69472a0cdea29e23967db6a3395487539b759def3920327d1f49ae00b9dfd4
+    image: lscr.io/linuxserver/sonarr:4.0.9@sha256:98c21a64377619ec74778c70cc2e74d3e978a4d2c61f97b9ad88a0e5bc0766f9
     volumes:
       - "{{ appdata_path }}/sonarr:/config"
       - /mnt/data:/data
@@ -69,7 +69,7 @@ containers:
 
   - name: sonarr-anime
     enabled_on: docker
-    image: lscr.io/linuxserver/sonarr:3.0.10@sha256:4f69472a0cdea29e23967db6a3395487539b759def3920327d1f49ae00b9dfd4
+    image: lscr.io/linuxserver/sonarr:4.0.9@sha256:98c21a64377619ec74778c70cc2e74d3e978a4d2c61f97b9ad88a0e5bc0766f9
     volumes:
       - "{{ appdata_path }}/sonarr-anime:/config"
       - /mnt/data:/data
