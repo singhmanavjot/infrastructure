@@ -114,7 +114,7 @@ containers:
 
   - name: plex
     enabled_on: docker
-    image: ghcr.io/linuxserver/plex:1.41.0@sha256:0c4e1981b23c3bdf2892cb9b85c299137af55390044dd5cfdd33bdbc4e32ee1f
+    image: ghcr.io/linuxserver/plex:1.41.0@sha256:c8e5ab6336b20f89b4106945fa2ee035c0d0e8e9ad13a24b7e14b924b5c68090
     environment:
       - VERSION=docker
       - DOCKER_MODS=linuxserver/mods:plex-absolute-hama
