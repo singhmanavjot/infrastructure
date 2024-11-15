@@ -75,7 +75,7 @@ containers:
       - /mnt/data:/data
     ports:
       - 9898:8989
-    mem_limit: 1024m
+    mem_limit: 4096m
 
   - name: prowlarr
     enabled_on: docker
@@ -101,7 +101,7 @@ containers:
     volumes:
       - "{{ appdata_path }}/sabnzbd:/config"
       - /mnt/data/usenet:/data/usenet
-    mem_limit: 1024m
+    mem_limit: 8192m
 
   - name: tautulli
     enabled_on: docker
