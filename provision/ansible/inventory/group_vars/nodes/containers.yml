@@ -79,7 +79,7 @@ containers:
 
   - name: prowlarr
     enabled_on: docker
-    image: lscr.io/linuxserver/prowlarr:1.26.0-develop@sha256:f9b7c05fc5fb015c521197a1184208d43f92ff1eabb1485898b86b35052ee393
+    image: lscr.io/linuxserver/prowlarr:1.26.1-develop@sha256:145d486baab944b8ff38cc6bb282c3a41c031d41b9a1699791167a7f47913ff6
     volumes:
       - "{{ appdata_path }}/prowlarr:/config"
     ports:
