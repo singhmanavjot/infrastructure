@@ -105,7 +105,7 @@ containers:
 
   - name: tautulli
     enabled_on: docker
-    image: lscr.io/linuxserver/tautulli:2.14.6@sha256:ac17e75ae0092a5f6dbd19e372c23239896958a6f2764bfc8b65b1f777359302
+    image: lscr.io/linuxserver/tautulli:2.14.6@sha256:2f68096053131939bff668adeffc2511baf0e01e0c140248ab220e08b2d85151
     ports:
       - 8181:8181
     volumes:
