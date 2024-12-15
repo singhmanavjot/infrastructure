@@ -49,7 +49,7 @@ containers:
 
   - name: radarr
     enabled_on: docker
-    image: lscr.io/linuxserver/radarr:5.15.1@sha256:c60610599d681dc7ea0aa1a5edfc1637ff4b5fb062872aea1539d291c835c4b3
+    image: lscr.io/linuxserver/radarr:5.15.1@sha256:399d00b11182a2622af0d42f115d29aed02a0fe58f6ebe98e1e654712d2e4acd
     volumes:
       - "{{ appdata_path }}/radarr:/config"
       - /mnt/data:/data
